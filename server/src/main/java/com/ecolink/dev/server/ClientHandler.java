@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import com.ecolink.dev.server.domain.User;
 import com.ecolink.dev.server.services.ClientService;
 
 public class ClientHandler implements Runnable{
@@ -27,29 +28,33 @@ public class ClientHandler implements Runnable{
 			this.socket = socket;
 			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		    startSession(bufferedReader);
-            broadcastMessage("SERVER: " + clientUsername + " has entered the chat");
+			this.clientUsername = bufferedReader.readLine();
+			
+		    startSession(bufferedReader, this.clientUsername);
+//            broadcastMessage("SERVER: " + clientUsername + " has entered the chat");
 			
 		}catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
 	}
 	
-    public void startSession(BufferedReader bufferedReader){
-         unicastMessage("Welcome to EcolinkCLI");
-         unicastMessage("username:");
-         
-        try {
-            this.clientUsername = bufferedReader.readLine();
-            unicastMessage("password:");
-            this.password = bufferedReader.readLine();
-            clientService.login(clientUsername, password);
-            clientHandlers.add(this);
- 
-         }catch(IOException e) {
-            e.printStackTrace();
-         }
-     
+    public void startSession(BufferedReader bufferedReader, String clientUsername) throws IOException{
+        System.out.println(clientUsername);
+        unicastMessage("password:");
+        String password = bufferedReader.readLine();
+        User user = clientService.login(clientUsername, password);
+        System.out.println(user.getName() + " LOGADO");
+//        if(clientService.findUser(clientUsername)) {
+//            unicastMessage("Welcome to EcolinkCLI, " + this.clientUsername);
+//            
+//            User user = clientService.login(clientUsername, password);
+//        	unicastMessage("Logado: " + user.toString());
+//        	clientHandlers.add(this);
+//        	System.out.println("User " + user.name + " Loged");
+//        }
+//        	unicastMessage("User not found!");
+        	socket.close();
+        
     }	
 
 

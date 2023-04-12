@@ -17,7 +17,7 @@ public class Server {
 	}
 	
 	
-	public void startServer() {
+	public void startServer() { 
 		try {
 			
 			while(!serverSocket.isClosed()) {
