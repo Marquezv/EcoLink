@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import com.ecolink.dev.server.services.ClientService;
+
 public class ClientHandler implements Runnable{
 	
 	
@@ -16,7 +18,7 @@ public class ClientHandler implements Runnable{
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
 	private String clientUsername;
-	
+    private ClientService clientService = new ClientService();
 	public ClientHandler(Socket socket) {
 		try {
 			// Write - Char
@@ -24,10 +26,11 @@ public class ClientHandler implements Runnable{
 			this.socket = socket;
 			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			unicastMessage("Faca o login");
-
-			this.clientUsername = bufferedReader.readLine();
-			clientHandlers.add(this);
+		    this.clientUsername = bufferedReader.readLine();
+           	//unicastMessage(clientService.login(bufferedReader, bufferedWriter, this.clientUsername));
+	        unicastMessage("Welcome " + clientUsername);
+            clientService.login(clientUsername);
+            clientHandlers.add(this);
 //			broadcastMessage("SERVER: " + clientUsername + " has entered the chat");
 			
 		}catch (IOException e) {
@@ -70,19 +73,12 @@ public class ClientHandler implements Runnable{
 	public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
 		removeClientHandler();
 		try {
-			if(bufferedReader != null) {
-				bufferedReader.close();
-			}
-			if(bufferedWriter != null) {
-				bufferedWriter.close();
-			}
-			if(socket != null) {
-				socket.close();
-			}
-				
+			bufferedReader.close();
+			bufferedWriter.close();
+			socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+        }
 	}
 	
 	@Override // Thread - code block paralelo

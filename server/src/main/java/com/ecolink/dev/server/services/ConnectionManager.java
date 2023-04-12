@@ -17,7 +17,7 @@ public class ConnectionManager {
 	}
 	
 	
-	public List<Entry<String, String>> allConnections() {
-		return connections.entrySet().stream().toList();
-	}
+   // public List<Entry<String, String>> allConnections() {
+	//	return connections.entrySet().stream().toList();
+	//}
 }

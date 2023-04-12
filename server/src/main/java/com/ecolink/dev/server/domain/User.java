@@ -2,12 +2,10 @@ package com.ecolink.dev.server.domain;
 
 import java.io.Serializable;
 
-import com.ecolink.dev.server.commons.status.LoginStatus;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -19,9 +17,24 @@ public class User implements Serializable{
 	private String token;
 	private String name;
 	private String password;
-	private LoginStatus loginStatus;
+//	private LoginStatus loginStatus;
 //	private Level level;
 	private Sector location;
 	private String office;
-	
+
+    public User(String name, String password, Sector location, String office){
+        super();
+        this.name = name;
+        this.password = password;
+        this.location = location;
+        this.office = office;
+
+        userToken();
+    }
+    
+    private void userToken(){
+       this.token = UUID.randomUUID().toString().substring(0, 5);
+    }
+
+
 }
