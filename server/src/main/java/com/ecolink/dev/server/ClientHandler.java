@@ -18,6 +18,7 @@ public class ClientHandler implements Runnable{
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
 	private String clientUsername;
+    private String password;
     private ClientService clientService = new ClientService();
 	public ClientHandler(Socket socket) {
 		try {
@@ -26,19 +27,32 @@ public class ClientHandler implements Runnable{
 			this.socket = socket;
 			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		    this.clientUsername = bufferedReader.readLine();
-           	//unicastMessage(clientService.login(bufferedReader, bufferedWriter, this.clientUsername));
-	        unicastMessage("Welcome " + clientUsername);
-            clientService.login(clientUsername);
-            clientHandlers.add(this);
-//			broadcastMessage("SERVER: " + clientUsername + " has entered the chat");
+		    startSession(bufferedReader);
+            broadcastMessage("SERVER: " + clientUsername + " has entered the chat");
 			
 		}catch (IOException e) {
-			closeEverything(socket, bufferedReader, bufferedWriter);
-		}
+            closeEverything(socket, bufferedReader, bufferedWriter);
+        }
 	}
 	
-	
+    public void startSession(BufferedReader bufferedReader){
+         unicastMessage("Welcome to EcolinkCLI");
+         unicastMessage("username:");
+         
+        try {
+            this.clientUsername = bufferedReader.readLine();
+            unicastMessage("password:");
+            this.password = bufferedReader.readLine();
+            clientService.login(clientUsername, password);
+            clientHandlers.add(this);
+ 
+         }catch(IOException e) {
+            e.printStackTrace();
+         }
+     
+    }	
+
+
 	public void unicastMessage(String messageToSend) {
 		
 			try {
