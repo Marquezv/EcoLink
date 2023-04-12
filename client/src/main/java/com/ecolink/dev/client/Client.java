@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -26,6 +25,7 @@ public class Client
 			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.username = username;
+			
 		} catch (IOException e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
 		}
@@ -42,9 +42,9 @@ public class Client
 			while(socket.isConnected()) {
 				String messageToSend = scanner.nextLine();
 				
-				Message msg = new Message(username, "reciver_id", messageToSend, null);
+//				Message msg = new Message(username, "reciver_id", messageToSend, null);
 	
-				bufferedWriter.write(msg.toString());
+				bufferedWriter.write(messageToSend);
 				bufferedWriter.newLine();
 				bufferedWriter.flush();
 			}
@@ -97,13 +97,13 @@ public class Client
 	public static void main(String[] args) throws IOException {
 		
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Enter your username for the group chat: ");
+		System.out.println("username: ");
 		String username = scanner.nextLine();
 		Socket socket = new Socket("localhost", 7000);
 		Client client = new Client(socket, username);
 		client.listenForMessage();
 		client.sendMessage();
-		
+		scanner.close();
 	}
 	
 }
