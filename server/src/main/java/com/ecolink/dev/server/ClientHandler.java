@@ -7,19 +7,17 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
-
+import java.util.List;
 import com.ecolink.dev.server.domain.User;
 import com.ecolink.dev.server.services.ClientService;
 
 public class ClientHandler implements Runnable{
 	
-	
-	public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+    public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
 	private Socket socket;
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
-	private String clientUsername;
-    private String password;
+	private User user;
     private ClientService clientService = new ClientService();
 	public ClientHandler(Socket socket) {
 		try {
@@ -28,35 +26,28 @@ public class ClientHandler implements Runnable{
 			this.socket = socket;
 			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.clientUsername = bufferedReader.readLine();
-			
-		    startSession(bufferedReader, this.clientUsername);
-//            broadcastMessage("SERVER: " + clientUsername + " has entered the chat");
-			
-		}catch (IOException e) {
+			String clientUsername = bufferedReader.readLine();
+		    startSession(bufferedReader, clientUsername);
+            clientHandlers.add(this);
+            broadcastMessage("SERVER: " + clientUsername + " has entered the chat");	
+	        System.out.println(userList());
+        }catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
 	}
 	
-    public void startSession(BufferedReader bufferedReader, String clientUsername) throws IOException{
-        System.out.println(clientUsername);
+    public User startSession(BufferedReader bufferedReader, String clientUsername) throws IOException{
         unicastMessage("password:");
         String password = bufferedReader.readLine();
-        User user = clientService.login(clientUsername, password);
-        System.out.println(user.getName() + " LOGADO");
-//        if(clientService.findUser(clientUsername)) {
-//            unicastMessage("Welcome to EcolinkCLI, " + this.clientUsername);
-//            
-//            User user = clientService.login(clientUsername, password);
-//        	unicastMessage("Logado: " + user.toString());
-//        	clientHandlers.add(this);
-//        	System.out.println("User " + user.name + " Loged");
-//        }
-//        	unicastMessage("User not found!");
+        this.user = clientService.login(clientUsername, password);
+        if(this.user != null) {
+        	unicastMessage("Welcome to EcolinkCLI, " + this.user.getName());
+        }else {
+         	unicastMessage("User not found!");
         	socket.close();
-        
+        }
+        return this.user;
     }	
-
 
 	public void unicastMessage(String messageToSend) {
 		
@@ -71,10 +62,11 @@ public class ClientHandler implements Runnable{
 	}
 	
 	public void broadcastMessage(String messageToSend) {
-		for (ClientHandler clientHandler: clientHandlers) {
+		String msg = "[" + this.user.name +  "]:" + messageToSend;
+        for (ClientHandler clientHandler: clientHandlers) {
 			try {
-				if(!clientHandler.clientUsername.equals(clientUsername)) {
-					clientHandler.bufferedWriter.write(messageToSend);
+				if(!clientHandler.user.name.equals(this.user.getName()) && messageToSend != null) {
+					clientHandler.bufferedWriter.write(msg);
 					clientHandler.bufferedWriter.newLine();
 					clientHandler.bufferedWriter.flush();
 				}
@@ -86,20 +78,28 @@ public class ClientHandler implements Runnable{
 	
 	public void removeClientHandler() {
 		clientHandlers.remove(this);
-		broadcastMessage("SERVER: " + clientUsername + " has left the chat!");
+		broadcastMessage("SERVER: " + this.user.name + " has left the chat!");
 	}
 	
 	public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
 		removeClientHandler();
 		try {
-			bufferedReader.close();
-			bufferedWriter.close();
-			socket.close();
+			if(bufferedReader != null) bufferedReader.close(); 
+			if(bufferedWriter != null) bufferedWriter.close();
+			if(socket != null )socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
         }
 	}
-	
+    
+    public List<String> userList(){
+        List<String> result = new ArrayList<String>();
+        for(ClientHandler handler : clientHandlers){
+            result.add(handler.user.getName());
+        }
+        return result;
+    }
+
 	@Override // Thread - code block paralelo
 	public void run() {
 		String messageFromClient;
@@ -108,7 +108,6 @@ public class ClientHandler implements Runnable{
 			try {
 				messageFromClient = bufferedReader.readLine();
 				//Message Obj
-				System.out.println(messageFromClient);
 				broadcastMessage(messageFromClient);
 			} catch (IOException e) {
 				closeEverything(socket, bufferedReader, bufferedWriter);

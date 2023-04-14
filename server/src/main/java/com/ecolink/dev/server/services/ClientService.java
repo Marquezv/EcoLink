@@ -1,4 +1,5 @@
 package com.ecolink.dev.server.services;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +24,7 @@ public class ClientService {
     }
 
     private void loadList(){
-        User user = new User("Erro", "1");
+        User user = new User("Vini", "1");
         User user2 = new User("Lua", "1");
         
         ClientService.userList.add(user);
@@ -38,11 +39,9 @@ public class ClientService {
     private Optional<User> findUser(User user) {
     	Optional<User> results = userList.stream()
     			.filter(u -> u.getName().equals(user.getName())).findFirst();
-    	
+
     	return results;
     }
     
 }
-
-
 
