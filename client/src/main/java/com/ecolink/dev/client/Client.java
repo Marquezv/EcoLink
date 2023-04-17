@@ -15,14 +15,14 @@ public class Client
 	private Socket socket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	private User username;
+	private User user;
 	
 	public  Client(Socket socket, User user) {
 		try {
 			this.socket = socket;
 			this.out = new ObjectOutputStream(socket.getOutputStream());
 			this.in = new ObjectInputStream(socket.getInputStream());
-			this.username = user;
+			this.user = user;
 			
 		} catch (IOException e) {
 			closeEverything(socket, in, out);
@@ -31,7 +31,7 @@ public class Client
 	
 	public void sendMessage() {
 		try {
-			out.writeObject(username.toString());
+			out.writeObject(user);
 			out.flush();
 			
 			Scanner scanner = new Scanner(System.in);
@@ -54,7 +54,7 @@ public class Client
 		new Thread(new Runnable(){
 			@Override
 			public void run() {
-
+				
 				String msgFromGroupChat;
 				while(socket.isConnected()) {
 					try {
@@ -89,7 +89,7 @@ public class Client
 		}
 	}
 	
-	public static User login(Scanner scanner) {
+	public User login(Scanner scanner) {
 		System.out.println("username: ");
 		String username = scanner.nextLine();
 		System.out.println("password:");
@@ -101,8 +101,15 @@ public class Client
 	public static void main(String[] args) throws IOException {
 		
 		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("username: ");
+		String username = scanner.nextLine();
+		System.out.println("password:");
+	    String password = scanner.nextLine();
+	    User user = new User(username, password);
+		
 		Socket socket = new Socket("localhost", 7000);
-		Client client = new Client(socket, login(scanner));
+		Client client = new Client(socket, user);
 		client.listenForMessage();
 		client.sendMessage();
 		scanner.close();

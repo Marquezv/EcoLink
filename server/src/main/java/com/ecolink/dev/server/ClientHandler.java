@@ -25,7 +25,7 @@ public class ClientHandler implements Runnable{
 			this.socket = socket;
 			this.out = new ObjectOutputStream(socket.getOutputStream());
 			this.in = new ObjectInputStream(socket.getInputStream());
-			String clientUsername = in.readObject().toString();
+			String clientUsername = "teste";
 		    startSession(in, clientUsername);
             clientHandlers.add(this);
             broadcastMessage("SERVER: " + clientUsername + " has entered the chat");
@@ -44,7 +44,7 @@ public class ClientHandler implements Runnable{
 //         	unicastMessage("User not found!");
 //        	socket.close();
 //        }
-	  	System.out.println((String) in.readObject());
+	  	System.out.println((User) in.readObject());
         this.user = new User("vini", "o");
         return user;
     }
@@ -110,8 +110,7 @@ public class ClientHandler implements Runnable{
 
 		while(socket.isConnected()) {
 			try {
-				messageFromClient = in.readObject().toString();
-				System.out.println(messageFromClient);
+				User u = (User) in.readObject();
 				//Message Obj
 //				broadcastMessage(messageFromClient);
 			} catch (IOException | ClassNotFoundException e) {

@@ -2,14 +2,14 @@ package com.ecolink.dev.server.domain;
 
 import java.io.Serializable;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import java.util.UUID;
 
+@Getter
+@Setter
 @ToString
-@EqualsAndHashCode
 public class User implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -35,5 +35,6 @@ public class User implements Serializable{
     private void userToken(){
        this.token = UUID.randomUUID().toString().substring(0, 5);
     }
+
 
 }
