@@ -1,42 +1,38 @@
 package com.ecolink.dev.client;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
-import com.ecolink.dev.client.domain.Message;
+import com.ecolink.dev.client.domain.User;
 
 
 public class Client 
 {
 	
 	private Socket socket;
-	private BufferedReader bufferedReader;
-	private BufferedWriter bufferedWriter;
-	private String username;
+	private ObjectOutputStream out;
+	private ObjectInputStream in;
+	private User username;
 	
-	public  Client(Socket socket, String username) {
+	public  Client(Socket socket, User user) {
 		try {
 			this.socket = socket;
-			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.username = username;
+			this.out = new ObjectOutputStream(socket.getOutputStream());
+			this.in = new ObjectInputStream(socket.getInputStream());
+			this.username = user;
 			
 		} catch (IOException e) {
-			closeEverything(socket, bufferedReader, bufferedWriter);
+			closeEverything(socket, in, out);
 		}
 	}
 	
 	public void sendMessage() {
 		try {
-			bufferedWriter.write(username);
-			bufferedWriter.newLine();
-			bufferedWriter.flush();
-			
+			out.writeObject(username.toString());
+			out.flush();
 			
 			Scanner scanner = new Scanner(System.in);
 			while(socket.isConnected()) {
@@ -44,12 +40,11 @@ public class Client
 				
 //				Message msg = new Message(username, "reciver_id", messageToSend, null);
 	
-				bufferedWriter.write(messageToSend);
-				bufferedWriter.newLine();
-				bufferedWriter.flush();
+				out.writeObject(messageToSend);
+				out.flush();
 			}
 		} catch (IOException e) {
-			closeEverything(socket, bufferedReader, bufferedWriter);
+			closeEverything(socket, in, out);
 		}
 	}
 	
@@ -63,12 +58,12 @@ public class Client
 				String msgFromGroupChat;
 				while(socket.isConnected()) {
 					try {
-						msgFromGroupChat = bufferedReader.readLine();
+						msgFromGroupChat = in.readObject().toString();
 						
 						if(msgFromGroupChat != null) System.out.println(msgFromGroupChat);
 						
-					}catch (IOException e) {
-						closeEverything(socket, bufferedReader, bufferedWriter);
+					}catch (IOException | ClassNotFoundException e) {
+						closeEverything(socket, in, out);
 					}
 				}
 			}
@@ -77,13 +72,13 @@ public class Client
 	
 	
 	
-	public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+	public void closeEverything(Socket socket, ObjectInputStream in, ObjectOutputStream out) {
 		try {
-			if(bufferedReader != null) {
-				bufferedReader.close();
+			if(out != null) {
+				out.close();
 			}
-			if(bufferedWriter != null) {
-				bufferedWriter.close();
+			if(in != null) {
+				in.close();
 			}
 			if(socket != null) {
 				socket.close();
@@ -94,13 +89,20 @@ public class Client
 		}
 	}
 	
+	public static User login(Scanner scanner) {
+		System.out.println("username: ");
+		String username = scanner.nextLine();
+		System.out.println("password:");
+	    String password = scanner.nextLine();
+	    User user = new User(username, password);
+	    return user;
+	}
+	
 	public static void main(String[] args) throws IOException {
 		
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("username: ");
-		String username = scanner.nextLine();
 		Socket socket = new Socket("localhost", 7000);
-		Client client = new Client(socket, username);
+		Client client = new Client(socket, login(scanner));
 		client.listenForMessage();
 		client.sendMessage();
 		scanner.close();

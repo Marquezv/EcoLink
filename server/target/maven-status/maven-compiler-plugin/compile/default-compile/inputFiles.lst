@@ -1,8 +1,8 @@
-/home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/Message.java
-/home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/ClientHandler.java
-/home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/repository/UserRepository.java
-/home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/Sector.java
-/home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/User.java
-/home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/Server.java
-/home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/services/ClientService.java
-/home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/services/ConnectionManager.java
+/home/vmarques/Desktop/Java/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/Sector.java
+/home/vmarques/Desktop/Java/EcoLink/server/src/main/java/com/ecolink/dev/server/services/ClientService.java
+/home/vmarques/Desktop/Java/EcoLink/server/src/main/java/com/ecolink/dev/server/Server.java
+/home/vmarques/Desktop/Java/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/Message.java
+/home/vmarques/Desktop/Java/EcoLink/server/src/main/java/com/ecolink/dev/server/repository/UserRepository.java
+/home/vmarques/Desktop/Java/EcoLink/server/src/main/java/com/ecolink/dev/server/ClientHandler.java
+/home/vmarques/Desktop/Java/EcoLink/server/src/main/java/com/ecolink/dev/server/services/ConnectionManager.java
+/home/vmarques/Desktop/Java/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/User.java

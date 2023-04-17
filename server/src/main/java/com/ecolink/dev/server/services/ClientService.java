@@ -3,7 +3,6 @@ package com.ecolink.dev.server.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.ecolink.dev.server.domain.User;
 
@@ -15,9 +14,9 @@ public class ClientService {
     
     public User login( String username, String password){
        loadList();
-       User userFind = findUser(new User(username, password)).orElse(userList.get(0));
+       this.user = findUser(new User(username, password)).orElseThrow(IllegalStateException::new);
        
-       if(checkCredentials(userFind)) return userFind;
+       if(checkCredentials(user)) return user;
        
        return userList.get(0);
        
@@ -33,12 +32,12 @@ public class ClientService {
     
     private boolean checkCredentials(User user) {
        return userList.stream()
-          		.anyMatch(u -> u.getPassword().equals(user.getPassword()));
+          		.anyMatch(u -> u.password.equals(user.password));
     } 
     
     private Optional<User> findUser(User user) {
     	Optional<User> results = userList.stream()
-    			.filter(u -> u.getName().equals(user.getName())).findFirst();
+    			.filter(u -> u.name.equals(user.name)).findFirst();
 
     	return results;
     }

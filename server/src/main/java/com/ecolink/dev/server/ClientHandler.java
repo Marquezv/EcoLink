@@ -1,22 +1,21 @@
 package com.ecolink.dev.server;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.ecolink.dev.server.domain.User;
 import com.ecolink.dev.server.services.ClientService;
 
 public class ClientHandler implements Runnable{
-	
+
     public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
 	private Socket socket;
-	private BufferedReader bufferedReader;
-	private BufferedWriter bufferedWriter;
+	private ObjectOutputStream out;
+	private ObjectInputStream in;
 	private User user;
     private ClientService clientService = new ClientService();
 	public ClientHandler(Socket socket) {
@@ -24,78 +23,83 @@ public class ClientHandler implements Runnable{
 			// Write - Char
 			// Stream - Byte
 			this.socket = socket;
-			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			String clientUsername = bufferedReader.readLine();
-		    startSession(bufferedReader, clientUsername);
+			this.out = new ObjectOutputStream(socket.getOutputStream());
+			this.in = new ObjectInputStream(socket.getInputStream());
+			String clientUsername = in.readObject().toString();
+		    startSession(in, clientUsername);
             clientHandlers.add(this);
-            broadcastMessage("SERVER: " + clientUsername + " has entered the chat");	
+            broadcastMessage("SERVER: " + clientUsername + " has entered the chat");
 	        System.out.println(userList());
-        }catch (IOException e) {
-            closeEverything(socket, bufferedReader, bufferedWriter);
+        }catch (IOException | ClassNotFoundException e) {
+            closeEverything(socket, in, out);
         }
 	}
-	
-    public User startSession(BufferedReader bufferedReader, String clientUsername) throws IOException{
-        unicastMessage("password:");
-        String password = bufferedReader.readLine();
-        this.user = clientService.login(clientUsername, password);
-        if(this.user != null) {
-        	unicastMessage("Welcome to EcolinkCLI, " + this.user.getName());
-        }else {
-         	unicastMessage("User not found!");
-        	socket.close();
-        }
-        return this.user;
-    }	
+
+  public User startSession(ObjectInputStream in, String clientUsername) throws IOException, ClassNotFoundException{
+//        String password = in.readObject().toString();
+//        this.user = clientService.login(clientUsername, password);
+//        if(this.user != null) {
+//        	unicastMessage("Welcome to EcolinkCLI, " + this.user.name);
+//        }else {
+//         	unicastMessage("User not found!");
+//        	socket.close();
+//        }
+	  	System.out.println((String) in.readObject());
+        this.user = new User("vini", "o");
+        return user;
+    }
 
 	public void unicastMessage(String messageToSend) {
-		
+
 			try {
-				bufferedWriter.write(messageToSend);
-				bufferedWriter.newLine();
-				bufferedWriter.flush();
+				out.writeObject(messageToSend);
+				out.flush();
 			} catch (IOException e) {
-				closeEverything(socket, bufferedReader, bufferedWriter);
+				closeEverything(socket, in, out);
 			}
-		
+
 	}
-	
+
 	public void broadcastMessage(String messageToSend) {
 		String msg = "[" + this.user.name +  "]:" + messageToSend;
         for (ClientHandler clientHandler: clientHandlers) {
 			try {
-				if(!clientHandler.user.name.equals(this.user.getName()) && messageToSend != null) {
-					clientHandler.bufferedWriter.write(msg);
-					clientHandler.bufferedWriter.newLine();
-					clientHandler.bufferedWriter.flush();
+				if(!clientHandler.user.name.equals(this.user.name) && messageToSend != null) {
+					clientHandler.out.writeObject(msg);
+					clientHandler.out.flush();
 				}
 			} catch (IOException e) {
-				closeEverything(socket, bufferedReader, bufferedWriter);
+				closeEverything(socket, in, out);
 			}
 		}
 	}
-	
+
 	public void removeClientHandler() {
 		clientHandlers.remove(this);
 		broadcastMessage("SERVER: " + this.user.name + " has left the chat!");
 	}
-	
-	public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
-		removeClientHandler();
+
+	public void closeEverything(Socket socket, ObjectInputStream in, ObjectOutputStream out) {
 		try {
-			if(bufferedReader != null) bufferedReader.close(); 
-			if(bufferedWriter != null) bufferedWriter.close();
-			if(socket != null )socket.close();
+			if(out != null) {
+				out.close();
+			}
+			if(in != null) {
+				in.close();
+			}
+			if(socket != null) {
+				socket.close();
+			}
+				
 		} catch (IOException e) {
 			e.printStackTrace();
-        }
+		}
 	}
-    
-    public List<String> userList(){
+
+  public List<String> userList(){
         List<String> result = new ArrayList<String>();
         for(ClientHandler handler : clientHandlers){
-            result.add(handler.user.getName());
+            result.add(handler.user.name);
         }
         return result;
     }
@@ -103,18 +107,19 @@ public class ClientHandler implements Runnable{
 	@Override // Thread - code block paralelo
 	public void run() {
 		String messageFromClient;
-		
+
 		while(socket.isConnected()) {
 			try {
-				messageFromClient = bufferedReader.readLine();
+				messageFromClient = in.readObject().toString();
+				System.out.println(messageFromClient);
 				//Message Obj
-				broadcastMessage(messageFromClient);
-			} catch (IOException e) {
-				closeEverything(socket, bufferedReader, bufferedWriter);
+//				broadcastMessage(messageFromClient);
+			} catch (IOException | ClassNotFoundException e) {
+				closeEverything(socket, in, out);
 				break;
 			}
 		}
-		
+
 	}
-	
+
 }
