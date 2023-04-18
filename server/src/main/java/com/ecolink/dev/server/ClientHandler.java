@@ -1,124 +1,128 @@
 package com.ecolink.dev.server;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.ecolink.dev.server.domain.User;
 import com.ecolink.dev.server.services.ClientService;
 
 public class ClientHandler implements Runnable{
-
-    public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+	
+	
+	public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
 	private Socket socket;
-	private ObjectOutputStream out;
-	private ObjectInputStream in;
-	private User user;
+	private BufferedReader bufferedReader;
+	private BufferedWriter bufferedWriter;
+	private String clientUsername;
+    private String password;
     private ClientService clientService = new ClientService();
 	public ClientHandler(Socket socket) {
 		try {
 			// Write - Char
 			// Stream - Byte
 			this.socket = socket;
-			this.out = new ObjectOutputStream(socket.getOutputStream());
-			this.in = new ObjectInputStream(socket.getInputStream());
-			String clientUsername = "teste";
-		    startSession(in, clientUsername);
-            clientHandlers.add(this);
+			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//			this.clientUsername = bufferedReader.readLine();
+			
+//		    startSession(bufferedReader, this.clientUsername);
             broadcastMessage("SERVER: " + clientUsername + " has entered the chat");
-	        System.out.println(userList());
-        }catch (IOException | ClassNotFoundException e) {
-            closeEverything(socket, in, out);
+			
+		}catch (IOException e) {
+            closeEverything(socket, bufferedReader, bufferedWriter);
         }
 	}
+	
+    public void startSession(BufferedReader bufferedReader, String clientUsername) throws IOException{
+        System.out.println(clientUsername);
+        unicastMessage("password:");
+        this.password = bufferedReader.readLine();
+        User user = clientService.login(clientUsername, password);
+        System.out.println(user.getName() + " LOGADO");
+        unicastMessage("Welcome to EcolinkCLI, " + this.clientUsername);
+        clientHandlers.add(this);
+    }	
 
-  public User startSession(ObjectInputStream in, String clientUsername) throws IOException, ClassNotFoundException{
-//        String password = in.readObject().toString();
-//        this.user = clientService.login(clientUsername, password);
-//        if(this.user != null) {
-//        	unicastMessage("Welcome to EcolinkCLI, " + this.user.name);
-//        }else {
-//         	unicastMessage("User not found!");
-//        	socket.close();
-//        }
-	  	System.out.println((User) in.readObject());
-        this.user = new User("vini", "o");
-        return user;
-    }
 
 	public void unicastMessage(String messageToSend) {
-
+		
 			try {
-				out.writeObject(messageToSend);
-				out.flush();
+				bufferedWriter.write(messageToSend);
+				bufferedWriter.newLine();
+				bufferedWriter.flush();
 			} catch (IOException e) {
-				closeEverything(socket, in, out);
+				closeEverything(socket, bufferedReader, bufferedWriter);
 			}
-
+		
 	}
-
+	
 	public void broadcastMessage(String messageToSend) {
-		String msg = "[" + this.user.name +  "]:" + messageToSend;
-        for (ClientHandler clientHandler: clientHandlers) {
+		for (ClientHandler clientHandler: clientHandlers) {
 			try {
-				if(!clientHandler.user.name.equals(this.user.name) && messageToSend != null) {
-					clientHandler.out.writeObject(msg);
-					clientHandler.out.flush();
+				if(!clientHandler.clientUsername.equals(clientUsername)) {
+					clientHandler.bufferedWriter.write(messageToSend);
+					clientHandler.bufferedWriter.newLine();
+					clientHandler.bufferedWriter.flush();
 				}
 			} catch (IOException e) {
-				closeEverything(socket, in, out);
+				closeEverything(socket, bufferedReader, bufferedWriter);
 			}
 		}
 	}
-
+	
 	public void removeClientHandler() {
 		clientHandlers.remove(this);
-		broadcastMessage("SERVER: " + this.user.name + " has left the chat!");
+		broadcastMessage("SERVER: " + clientUsername + " has left the chat!");
 	}
-
-	public void closeEverything(Socket socket, ObjectInputStream in, ObjectOutputStream out) {
+	
+	public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+		removeClientHandler();
 		try {
-			if(out != null) {
-				out.close();
-			}
-			if(in != null) {
-				in.close();
-			}
-			if(socket != null) {
-				socket.close();
-			}
-				
+			bufferedReader.close();
+			bufferedWriter.close();
+			socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+        }
 	}
 
-  public List<String> userList(){
-        List<String> result = new ArrayList<String>();
-        for(ClientHandler handler : clientHandlers){
-            result.add(handler.user.name);
-        }
-        return result;
-    }
-
+	public boolean clientStatus() throws IOException {
+		if(bufferedReader.read() == -1) {
+			return true;
+		}
+		return false;
+	}
+	
 	@Override // Thread - code block paralelo
 	public void run() {
 		String messageFromClient;
-
+		
 		while(socket.isConnected()) {
 			try {
-				User u = (User) in.readObject();
-				//Message Obj
-//				broadcastMessage(messageFromClient);
-			} catch (IOException | ClassNotFoundException e) {
-				closeEverything(socket, in, out);
+				if(clientStatus()) {
+					messageFromClient = bufferedReader.readLine();
+					//Commands
+					if(messageFromClient.equals("ping")) {
+						System.out.println("Teste");
+						unicastMessage("connected");
+					}
+					//Message Obj
+//					System.out.println(messageFromClient);
+					System.out.println(bufferedReader.readLine());
+//					broadcastMessage(messageFromClient);
+				}
+				closeEverything(socket, bufferedReader, bufferedWriter);
+			} catch (IOException e) {
+				closeEverything(socket, bufferedReader, bufferedWriter);
 				break;
 			}
 		}
-
+		
 	}
-
+	
 }

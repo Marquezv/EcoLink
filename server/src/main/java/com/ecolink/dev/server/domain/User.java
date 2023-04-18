@@ -26,7 +26,7 @@ public class User implements Serializable{
         super();
         this.name = name;
         this.password = password;
-        //this.location = location;
+        //this.location = location;	
         //this.office = office;
 
         userToken();

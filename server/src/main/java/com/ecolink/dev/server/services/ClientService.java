@@ -18,16 +18,16 @@ public class ClientService {
        
        if(checkCredentials(user)) return user;
        
-       return userList.get(0);
+       return user;
        
     }
 
     private void loadList(){
         User user = new User("Vini", "1");
         User user2 = new User("Lua", "1");
+        User user3 = new User("Teste", "1");
         
-        ClientService.userList.add(user);
-        ClientService.userList.add(user2);
+        ClientService.userList.addAll(List.of(user, user2, user3));
     }
     
     private boolean checkCredentials(User user) {
