@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -109,15 +108,10 @@ public class ClientHandler implements Runnable{
 				//Commad Reciver
 				messageFromClient = bufferedReader.readLine();
 				System.out.println(messageFromClient);
-				System.out.println(messageFromClient.indexOf("-g"));
+				String[] msgArray = messageFromClient.split("\\s");
+				System.out.println(String.join(",", msgArray));
 //				System.out.println(clientStatus());
 //				broadcastMessage(messageFromClient);
-
-				if(messageFromClient == null) {
-					System.out.println("User  Disconected");
-					closeEverything(socket, bufferedReader, bufferedWriter);
-					break;
-				}
 				
 			}	
 		} catch (IOException e) {

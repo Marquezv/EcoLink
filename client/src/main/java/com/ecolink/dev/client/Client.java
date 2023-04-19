@@ -8,6 +8,10 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+import com.ecolink.dev.client.commands.CommandControl;
+
+import picocli.CommandLine;
+
 
 public class Client 
 {
@@ -15,6 +19,7 @@ public class Client
 	private Socket socket;
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
+
 	private String username;
 	
 	public  Client(Socket socket, String username) {
@@ -40,13 +45,12 @@ public class Client
 			bufferedWriter.newLine();
 			bufferedWriter.flush();
 			
-			
 			Scanner scanner = new Scanner(System.in);
 			while(socket.isConnected()) {
+				System.out.print(">");
 				String messageToSend = scanner.nextLine();
 				// Commands
-	//			Message msg = new Message(username, "reciver_id", messageToSend, null);
-	
+				new CommandLine(new CommandControl()).execute(messageToSend);
 				bufferedWriter.write(messageToSend);
 				bufferedWriter.newLine();
 				bufferedWriter.flush();
