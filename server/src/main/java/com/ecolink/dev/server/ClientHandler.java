@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ public class ClientHandler implements Runnable{
 	private BufferedWriter bufferedWriter;
 	private String clientUsername;
     private String password;
+    private User user;
     private ClientService clientService = new ClientService();
 	public ClientHandler(Socket socket) {
 		try {
@@ -28,9 +30,9 @@ public class ClientHandler implements Runnable{
 			this.socket = socket;
 			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//			this.clientUsername = bufferedReader.readLine();
+			this.clientUsername = bufferedReader.readLine();
 			
-//		    startSession(bufferedReader, this.clientUsername);
+		    startSession(bufferedReader, this.clientUsername);
             broadcastMessage("SERVER: " + clientUsername + " has entered the chat");
 			
 		}catch (IOException e) {
@@ -42,7 +44,7 @@ public class ClientHandler implements Runnable{
         System.out.println(clientUsername);
         unicastMessage("password:");
         this.password = bufferedReader.readLine();
-        User user = clientService.login(clientUsername, password);
+        this.user = clientService.login(clientUsername, password);
         System.out.println(user.getName() + " LOGADO");
         unicastMessage("Welcome to EcolinkCLI, " + this.clientUsername);
         clientHandlers.add(this);
@@ -90,37 +92,36 @@ public class ClientHandler implements Runnable{
 			e.printStackTrace();
         }
 	}
-
+	
 	public boolean clientStatus() throws IOException {
 		if(bufferedReader.read() == -1) {
 			return true;
 		}
 		return false;
 	}
+
 	
 	@Override // Thread - code block paralelo
 	public void run() {
 		String messageFromClient;
-		
-		while(socket.isConnected()) {
-			try {
-				if(clientStatus()) {
-					messageFromClient = bufferedReader.readLine();
-					//Commands
-					if(messageFromClient.equals("ping")) {
-						System.out.println("Teste");
-						unicastMessage("connected");
-					}
-					//Message Obj
-//					System.out.println(messageFromClient);
-					System.out.println(bufferedReader.readLine());
-//					broadcastMessage(messageFromClient);
+		try {
+			while(socket.isConnected()) {
+				//Commad Reciver
+				messageFromClient = bufferedReader.readLine();
+				System.out.println(messageFromClient);
+				System.out.println(messageFromClient.indexOf("-g"));
+//				System.out.println(clientStatus());
+//				broadcastMessage(messageFromClient);
+
+				if(messageFromClient == null) {
+					System.out.println("User  Disconected");
+					closeEverything(socket, bufferedReader, bufferedWriter);
+					break;
 				}
-				closeEverything(socket, bufferedReader, bufferedWriter);
-			} catch (IOException e) {
-				closeEverything(socket, bufferedReader, bufferedWriter);
-				break;
-			}
+				
+			}	
+		} catch (IOException e) {
+			closeEverything(socket, bufferedReader, bufferedWriter);
 		}
 		
 	}
