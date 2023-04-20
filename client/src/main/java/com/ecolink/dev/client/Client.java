@@ -44,7 +44,7 @@ public class Client
 			bufferedWriter.write(username);
 			bufferedWriter.newLine();
 			bufferedWriter.flush();
-			
+			System.out.print(">");
 			Scanner scanner = new Scanner(System.in);
 			while(socket.isConnected()) {
 				System.out.print(">");
