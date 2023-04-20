@@ -100,6 +100,14 @@ public class ClientHandler implements Runnable{
 	}
 
 	
+	public void listener(String word) {
+			System.out.println(word.contains("-g")|| word.contains("global"));
+			String globalPattern = "([A-Za-z0-9]+( [A-Za-z0-9]+)+) -g";
+			if(word.contains("-g")|| word.contains("global")) {
+				broadcastMessage(word.replaceAll(globalPattern, word));
+			}
+	}
+	
 	@Override // Thread - code block paralelo
 	public void run() {
 		String messageFromClient;
@@ -107,9 +115,8 @@ public class ClientHandler implements Runnable{
 			while(socket.isConnected()) {
 				//Commad Reciver
 				messageFromClient = bufferedReader.readLine();
-				System.out.println(messageFromClient);
 				String[] msgArray = messageFromClient.split("\\s");
-				System.out.println(String.join(",", msgArray));
+				listener(messageFromClient);
 //				System.out.println(clientStatus());
 //				broadcastMessage(messageFromClient);
 				
