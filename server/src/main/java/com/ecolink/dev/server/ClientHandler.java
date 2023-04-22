@@ -104,7 +104,8 @@ public class ClientHandler implements Runnable{
 			System.out.println(word.contains("-g")|| word.contains("global"));
 			String globalPattern = "([A-Za-z0-9]+( [A-Za-z0-9]+)+) -g";
 			if(word.contains("-g")|| word.contains("global")) {
-				broadcastMessage(word.replaceAll(globalPattern, word));
+				String update = word.replaceAll(globalPattern, "");
+				broadcastMessage(word.replaceAll(globalPattern, update));
 			}
 	}
 	

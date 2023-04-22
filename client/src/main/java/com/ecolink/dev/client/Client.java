@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import com.ecolink.dev.client.commands.CommandControl;
+import com.ecolink.dev.client.services.ClientService;
 
 import picocli.CommandLine;
 
@@ -19,7 +20,9 @@ public class Client
 	private Socket socket;
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
-
+	
+	private ClientService clientService;
+	
 	private String username;
 	
 	public  Client(Socket socket, String username) {
@@ -27,6 +30,7 @@ public class Client
 			this.socket = socket;
 			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			this.clientService = new ClientService(socket, this.bufferedWriter, this.bufferedReader);
 			this.username = username;
 		} catch (IOException e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
@@ -50,10 +54,7 @@ public class Client
 				System.out.print(">");
 				String messageToSend = scanner.nextLine();
 				// Commands
-				new CommandLine(new CommandControl()).execute(messageToSend);
-				bufferedWriter.write(messageToSend);
-				bufferedWriter.newLine();
-				bufferedWriter.flush();
+				new CommandLine(new CommandControl()).execute(messageToSend.split(" "));
 			}
 		} catch (IOException e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
