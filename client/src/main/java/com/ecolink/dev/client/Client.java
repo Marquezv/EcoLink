@@ -14,14 +14,11 @@ import com.ecolink.dev.client.services.ClientService;
 import picocli.CommandLine;
 
 
-public class Client 
-{
+public class Client {
 	
 	private Socket socket;
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
-	
-	private ClientService clientService;
 	
 	private String username;
 	
@@ -30,7 +27,6 @@ public class Client
 			this.socket = socket;
 			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.clientService = new ClientService(socket, this.bufferedWriter, this.bufferedReader);
 			this.username = username;
 		} catch (IOException e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
@@ -38,25 +34,17 @@ public class Client
 	}
 	
 	
-//	public boolean serverStatus(Socket socket) {
-//		
-//	}
-	
 	
 	public void sendMessage() {
 		try {
-			bufferedWriter.write(username);
-			bufferedWriter.newLine();
-			bufferedWriter.flush();
-			System.out.print(">");
 			Scanner scanner = new Scanner(System.in);
 			while(socket.isConnected()) {
 				System.out.print(">");
-				String messageToSend = scanner.nextLine();
+				String messageToSend = scanner.nextLine();	
 				// Commands
-				new CommandLine(new CommandControl()).execute(messageToSend.split(" "));
+				new CommandLine(new CommandControl(this.socket)).execute(messageToSend.split(" "));
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
 		}
 	}

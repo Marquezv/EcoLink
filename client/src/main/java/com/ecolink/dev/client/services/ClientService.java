@@ -3,16 +3,28 @@ package com.ecolink.dev.client.services;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.List;
 
-import com.ecolink.dev.client.Client;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ClientService implements ClientServiceImpl{
 	
 	private Socket socket;
 	private BufferedWriter bufferedWriter;
 	private BufferedReader bufferedReader;
+	
+	public ClientService(Socket socket) throws IOException {
+		super();
+		this.socket = socket;
+		this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+		this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	}
 	
 	@Override
 	public void sendMessage(String message) {
@@ -37,14 +49,5 @@ public class ClientService implements ClientServiceImpl{
 		return null;
 	}
 
-	public ClientService(Socket socket, BufferedWriter bufferedWriter, BufferedReader bufferedReader) {
-		super();
-		this.socket = socket;
-		this.bufferedWriter = bufferedWriter;
-		this.bufferedReader = bufferedReader;
-	}
-
-	
-	
 	
 }
