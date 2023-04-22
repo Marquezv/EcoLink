@@ -18,8 +18,6 @@ public class ClientHandler implements Runnable{
 	private Socket socket;
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
-	private String clientUsername;
-    private String password;
     private User user;
     private ClientService clientService = new ClientService();
 	public ClientHandler(Socket socket) {
@@ -29,23 +27,17 @@ public class ClientHandler implements Runnable{
 			this.socket = socket;
 			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.clientUsername = bufferedReader.readLine();
-			System.out.println(clientUsername);
 //		    startSession(bufferedReader, this.clientUsername);
-            broadcastMessage("SERVER: " + clientUsername + " has entered the chat");
 			
 		}catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
 	}
 	
-    public void startSession(BufferedReader bufferedReader, String clientUsername) throws IOException{
-        System.out.println(clientUsername);
-        unicastMessage("password:");
-        this.password = bufferedReader.readLine();
-        this.user = clientService.login(clientUsername, password);
+    public void startSession(String username, String password) throws IOException{
+        user = clientService.login(username, password);
         System.out.println(user.getName() + " LOGADO");
-        unicastMessage("Welcome to EcolinkCLI, " + this.clientUsername);
+        unicastMessage("Welcome to EcolinkCLI, " + username);
         clientHandlers.add(this);
     }	
 
@@ -65,7 +57,7 @@ public class ClientHandler implements Runnable{
 	public void broadcastMessage(String messageToSend) {
 		for (ClientHandler clientHandler: clientHandlers) {
 			try {
-				if(!clientHandler.clientUsername.equals(clientUsername)) {
+				if(!clientHandler.user.name.equals(user.name)) {
 					clientHandler.bufferedWriter.write("[SERVER]: " + messageToSend);
 					clientHandler.bufferedWriter.newLine();
 					clientHandler.bufferedWriter.flush();
@@ -78,7 +70,7 @@ public class ClientHandler implements Runnable{
 	
 	public void removeClientHandler() {
 		clientHandlers.remove(this);
-		broadcastMessage("SERVER: " + clientUsername + " has left the chat!");
+		broadcastMessage("SERVER: " + this.user.name + " has left the chat!");
 	}
 	
 	public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
@@ -100,14 +92,18 @@ public class ClientHandler implements Runnable{
 	}
 
 	
-	public void listener(String word) {
-			System.out.println(word.contains("-g")|| word.contains("global"));
-			String globalPattern = "([A-Za-z0-9]+( [A-Za-z0-9]+)+) -g";
-			if(word.contains("-g")|| word.contains("global")) {
-				String update = word.replaceAll(globalPattern, "");
-				broadcastMessage(word.replaceAll(globalPattern, update));
-			}
-	}
+	public void listener(String...args) throws IOException {
+		if(args[0].toString() == "login" || args[0].toString().equals("login")) {
+			String username = args[1].toString();
+			String password = args[2].toString();
+			startSession(username, password);
+		}
+		if(args[0].toString() == "create-group" || args[0].toString().equals("create-group")) {
+			String username = args[1].toString();
+			String password = args[2].toString();
+			startSession(username, password);
+		}
+	}	
 	
 	@Override // Thread - code block paralelo
 	public void run() {
@@ -115,9 +111,12 @@ public class ClientHandler implements Runnable{
 		try {
 			while(socket.isConnected()) {
 				//Commad Reciver
+				//Commad Reciver
 				messageFromClient = bufferedReader.readLine();
 				String[] msgArray = messageFromClient.split("\\s");
-				listener(messageFromClient);
+				System.out.println(msgArray);
+				System.out.println(msgArray.length);
+				listener(msgArray);
 //				System.out.println(clientStatus());
 //				broadcastMessage(messageFromClient);
 				
