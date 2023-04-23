@@ -2,7 +2,6 @@ package com.ecolink.dev.server.services;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 public class ConnectionManager {
 	
