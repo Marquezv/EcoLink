@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Built-By: vmarques
-Build-Jdk: 17.0.1
-Main-Class: com.ecolink.dev.Server
-Created-By: Maven Integration for Eclipse
-

@@ -3,20 +3,36 @@ package com.ecolink.dev.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Server {
 
 	private ServerSocket serverSocket;
-
+	
 	public Server(ServerSocket serverSocket) {
 		this.serverSocket = serverSocket;
 	}
+	
+	public static void createNewDatabse(String fileName) throws SQLException {
+		String sqlUrl = "jdbc:sqlite:sqlite/db/" + fileName;
+		
+		try(Connection conn = DriverManager.getConnection(sqlUrl)){
+			if(conn != null) {
+				DatabaseMetaData meta = conn.getMetaData();
+				System.out.println("The driver name is " + meta.getDriverName());
+				System.out.println("A new database has been created.");
+			}
+		}
 
-
+	}
+	
+	
 	public void startServer() {
 		try {
-
+			
 			while(!serverSocket.isClosed()) {
 				Socket socket = serverSocket.accept();
 				System.out.println("Client connected: " + socket.getInetAddress());
@@ -52,6 +68,7 @@ public class Server {
 				System.out.println("Server Started - PORT[" + PORT + "]");
 				server.startServer();
 
+//				server.createNewDatabse("ecolink.db");
 			} catch (Exception e) {
 				System.out.println("ERROR - " + e.getMessage());
 			}
