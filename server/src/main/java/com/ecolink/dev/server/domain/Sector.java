@@ -15,6 +15,6 @@ public class Sector implements Serializable{
 	private String id;
 	private String name;
 	private String cep;
-	private User sectorOwer;
+//	private User sectorOwer;
 //	private Poluition poluitionStatus;
 }

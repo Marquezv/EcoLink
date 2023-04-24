@@ -1,4 +1,10 @@
-/home/vmarques/Desktop/Java/EcoLink/client/src/main/java/com/ecolink/dev/client/domain/User.java
-/home/vmarques/Desktop/Java/EcoLink/client/src/main/java/com/ecolink/dev/client/commands/CommandControl.java
-/home/vmarques/Desktop/Java/EcoLink/client/src/main/java/com/ecolink/dev/client/domain/Message.java
-/home/vmarques/Desktop/Java/EcoLink/client/src/main/java/com/ecolink/dev/client/Client.java
+/home/vm/EcoLink/client/src/main/java/com/ecolink/dev/client/commands/subcommands/SendMessageSubcommads.java
+/home/vm/EcoLink/client/src/main/java/com/ecolink/dev/client/services/ClientServiceImpl.java
+/home/vm/EcoLink/client/src/main/java/com/ecolink/dev/client/Client.java
+/home/vm/EcoLink/client/src/main/java/com/ecolink/dev/client/domain/Message.java
+/home/vm/EcoLink/client/src/main/java/com/ecolink/dev/client/services/ClientService.java
+/home/vm/EcoLink/client/src/main/java/com/ecolink/dev/client/domain/User.java
+/home/vm/EcoLink/client/src/main/java/com/ecolink/dev/client/commands/subcommands/LoginSubcommand.java
+/home/vm/EcoLink/client/src/main/java/com/ecolink/dev/client/commands/CommandControl.java
+/home/vm/EcoLink/client/src/main/java/com/ecolink/dev/client/commands/subcommands/GroupSubcommand.java
+/home/vm/EcoLink/client/src/main/java/com/ecolink/dev/client/commands/subcommands/GlobalSubcommand.java

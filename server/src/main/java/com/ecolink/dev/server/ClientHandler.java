@@ -8,8 +8,10 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.ecolink.dev.server.domain.User;
-import com.ecolink.dev.server.services.ClientService;
+import com.ecolink.dev.server.domain.UserDTO;
+import com.ecolink.dev.server.repository.UserDao;
+import com.ecolink.dev.server.services.UserService;
+import com.ecolink.dev.server.services.UserServiceImpl;
 
 public class ClientHandler implements Runnable{
 	
@@ -18,8 +20,9 @@ public class ClientHandler implements Runnable{
 	private Socket socket;
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
-    private User user;
-    private ClientService clientService = new ClientService();
+	
+	private UserDTO userDTO;
+    private UserService userService;
 	public ClientHandler(Socket socket) {
 		try {
 			// Write - Char
@@ -27,20 +30,23 @@ public class ClientHandler implements Runnable{
 			this.socket = socket;
 			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			this.userService = new UserServiceImpl(new UserDao());
 //		    startSession(bufferedReader, this.clientUsername);
-			
-		}catch (IOException e) {
+			System.out.println("Testing save...");
+	    	System.out.println(this.userService.getAllUsers());
+	    	System.out.println("Ok");
+		}catch (Exception e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
 	}
 	
-    public void startSession(String username, String password) throws IOException{
-        user = clientService.login(username, password);
-        System.out.println(user.getName() + " LOGADO");
-        unicastMessage("Welcome to EcolinkCLI, " + username);
+    public void startSession(String token, String password) throws Exception{
+        UserDTO userDTO = userService.login(token, password);
+        System.out.println(userDTO.getName() + " LOGADO");
+        unicastMessage("Welcome to EcolinkCLI, " + userDTO.getName());
         clientHandlers.add(this);
     }	
-
+    
 
 	public void unicastMessage(String messageToSend) {
 		
@@ -57,7 +63,7 @@ public class ClientHandler implements Runnable{
 	public void broadcastMessage(String messageToSend) {
 		for (ClientHandler clientHandler: clientHandlers) {
 			try {
-				if(!clientHandler.user.name.equals(user.name)) {
+				if(!clientHandler.userDTO.name.equals(userDTO.name)) {
 					clientHandler.bufferedWriter.write("[SERVER]: " + messageToSend);
 					clientHandler.bufferedWriter.newLine();
 					clientHandler.bufferedWriter.flush();
@@ -70,7 +76,7 @@ public class ClientHandler implements Runnable{
 	
 	public void removeClientHandler() {
 		clientHandlers.remove(this);
-		broadcastMessage("SERVER: " + this.user.name + " has left the chat!");
+		broadcastMessage("SERVER: " + this.userDTO.name + " has left the chat!");
 	}
 	
 	public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
@@ -92,8 +98,13 @@ public class ClientHandler implements Runnable{
 	}
 
 	
-	public void listener(String...args) throws IOException {
+	public void listener(String...args) throws Exception {
 		if(args[0].toString() == "login" || args[0].toString().equals("login")) {
+			String username = args[1].toString();
+			String password = args[2].toString();
+			startSession(username, password);
+		}
+		if(args[0].toString() == "create-user" || args[0].toString().equals("login")) {
 			String username = args[1].toString();
 			String password = args[2].toString();
 			startSession(username, password);
@@ -121,7 +132,7 @@ public class ClientHandler implements Runnable{
 //				broadcastMessage(messageFromClient);
 				
 			}	
-		} catch (IOException e) {
+		} catch (Exception e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
 		}
 		
