@@ -1,5 +1,7 @@
 package com.ecolink.dev.server.domain.entity;
 
+import java.util.UUID;
+
 import com.ecolink.dev.server.domain.UserDTO;
 
 import lombok.Getter;
@@ -18,7 +20,7 @@ public class User {
 	
 	public User(String id, String token, String name, String password) {
 		super();
-		this.id = id;
+		this.id = UUID.randomUUID().toString();
 		this.token = token;
 		this.name = name;
 		this.password = password;

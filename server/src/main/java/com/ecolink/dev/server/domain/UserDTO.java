@@ -16,9 +16,7 @@ public class UserDTO implements Serializable{
 	public String getId() {
 		return id;
 	}
-	public void setId(String id) {
-		this.id = id;
-	}
+
 	public String getToken() {
 		return token;
 	}
@@ -33,6 +31,12 @@ public class UserDTO implements Serializable{
 	}
 	
 	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public UserDTO(String token, String name, String password) {
+		this.token = token;
+		this.name = name;
 		this.password = password;
 	}
 	

@@ -20,9 +20,17 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public UserDTO login(String token, String password) throws Exception {
 		User user =  userDao.findByToken(token);
-		if(user.getPassword() == password) {
+		System.out.println(user);
+		
+		System.out.println("Token - " + token);
+		System.out.println(user.getPassword());
+		System.out.println(user.getPassword().equals(password));
+
+		if(user.getPassword().equals(password)) {
 			return user.toDTO();
 		}
+		
+		
 		return null;
 	}
 	
@@ -34,12 +42,12 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public List<UserDTO> getAllUsers() throws SQLException {
-		return userDao.findAll().stream().map(User::toDTO).collect(Collectors.toList());
+		return userDao.findAll().stream().map(User::toDTO)
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public void saveUser(UserDTO userDTO) throws SQLException {
-		userDTO.setToken(userToken());
 		userDao.save(userDTO.toUser());
 	}
 
@@ -48,8 +56,9 @@ public class UserServiceImpl implements UserService{
 		userDao.deleteByToken(token);
 	}
 	
-	private String userToken() {
+	@Override
+	public String genUserToken() {
 	    return UUID.randomUUID().toString().substring(0, 5);
 	}
-	
+
 }

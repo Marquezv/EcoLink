@@ -25,7 +25,7 @@ public class GroupSubcommand implements Runnable{
 	private String groupName;
 	
 	@Option(names = {"-ul", "--userLimit"}, description = "Limit of users")
-	private Integer userLimit;
+	private Integer userLimit = 0;
 
 	@Override
 	public void run() {

@@ -9,7 +9,6 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import com.ecolink.dev.client.commands.CommandControl;
-import com.ecolink.dev.client.services.ClientService;
 
 import picocli.CommandLine;
 
@@ -20,14 +19,12 @@ public class Client {
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
 	
-	private String username;
-	
-	public  Client(Socket socket, String username) {
+	public  Client(Socket socket) {
 		try {
 			this.socket = socket;
 			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.username = username;
+			new CommandLine(new CommandControl(this.socket)).execute("-h");
 		} catch (IOException e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
 		}
@@ -92,12 +89,9 @@ public class Client {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Enter your username for the group chat: ");
-		String username = scanner.nextLine();
+		System.out.println("Welcome to EcoLinkCLI");
 		Socket socket = new Socket("localhost", 7000);
-		Client client = new Client(socket, username);
+		Client client = new Client(socket);
 		client.listenForMessage();
 		client.sendMessage();
 		

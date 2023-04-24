@@ -2,8 +2,10 @@ package com.ecolink.dev.client.commands;
 
 import java.net.Socket;
 
-import com.ecolink.dev.client.commands.subcommands.LoginSubcommand;
+import com.ecolink.dev.client.commands.subcommands.UserSubcommand;
+import com.ecolink.dev.client.commands.subcommands.ConfigSubcommand;
 import com.ecolink.dev.client.commands.subcommands.SendMessageSubcommads;
+import com.ecolink.dev.client.commands.subcommands.TokenSubcommand;
 import com.ecolink.dev.client.domain.User;
 
 import lombok.Getter;
@@ -18,7 +20,9 @@ import picocli.CommandLine.Spec;
 	mixinStandardHelpOptions = true,
 	subcommands = {
 			SendMessageSubcommads.class,
-			LoginSubcommand.class})
+			UserSubcommand.class,
+			TokenSubcommand.class,
+			ConfigSubcommand.class})
 public class CommandControl{
 	@Spec CommandSpec spec;
 	

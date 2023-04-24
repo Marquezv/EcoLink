@@ -23,6 +23,7 @@ public class ClientHandler implements Runnable{
 	
 	private UserDTO userDTO;
     private UserService userService;
+    
 	public ClientHandler(Socket socket) {
 		try {
 			// Write - Char
@@ -31,20 +32,14 @@ public class ClientHandler implements Runnable{
 			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.userService = new UserServiceImpl(new UserDao());
-//		    startSession(bufferedReader, this.clientUsername);
-			System.out.println("Testing save...");
-	    	System.out.println(this.userService.getAllUsers());
-	    	System.out.println("Ok");
+		    startSession();
 		}catch (Exception e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
 	}
 	
-    public void startSession(String token, String password) throws Exception{
-        UserDTO userDTO = userService.login(token, password);
-        System.out.println(userDTO.getName() + " LOGADO");
-        unicastMessage("Welcome to EcolinkCLI, " + userDTO.getName());
-        clientHandlers.add(this);
+    public void startSession() throws Exception{
+        unicastMessage("Conneted to EcoLink");
     }	
     
 
@@ -76,7 +71,7 @@ public class ClientHandler implements Runnable{
 	
 	public void removeClientHandler() {
 		clientHandlers.remove(this);
-		broadcastMessage("SERVER: " + this.userDTO.name + " has left the chat!");
+		broadcastMessage("SERVER: " + this.userDTO.getName() + " has left the chat!");
 	}
 	
 	public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
@@ -99,22 +94,45 @@ public class ClientHandler implements Runnable{
 
 	
 	public void listener(String...args) throws Exception {
+		if(args[0].toString() == "ping" || args[0].toString().equals("ping")) {
+			boolean loged = false;
+			if(this.userDTO != null) loged = true;
+			unicastMessage("[CONFIG] Server UP \nLoged: " + loged);
+		}
 		if(args[0].toString() == "login" || args[0].toString().equals("login")) {
-			String username = args[1].toString();
+			String token = args[1].toString();
 			String password = args[2].toString();
-			startSession(username, password);
+			try {
+				this.userDTO = userService.login(token, password);
+				unicastMessage("[LOGED] token: " + userDTO.getToken() + " user: " + userDTO.getName());
+			} catch (Exception e) {
+				unicastMessage("[ERROR] token: " + token + " NOT FOUND");
+			}
+			
 		}
-		if(args[0].toString() == "create-user" || args[0].toString().equals("login")) {
-			String username = args[1].toString();
-			String password = args[2].toString();
-			startSession(username, password);
+		if(args[0].toString() == "create-user" || args[0].toString().equals("create-user")) {
+			String token = args[1].toString();
+			String username = args[2].toString();
+			String password = args[3].toString();
+			UserDTO user = new UserDTO(token, username, password);
+			userService.saveUser(user);
+			unicastMessage("[Created] token: " + user.getToken() + " name: " + user.getName());
 		}
-		if(args[0].toString() == "create-group" || args[0].toString().equals("create-group")) {
-			String username = args[1].toString();
-			String password = args[2].toString();
-			startSession(username, password);
+		if(args[0].toString() == "update-user" || args[0].toString().equals("update-user")) {
+			UserDTO user = userService.login(args[1], args[2]);
+			user.setName(args[1]);
+			user.setPassword(args[2]);
+			userService.saveUser(user);
+			unicastMessage("[Update] token: " + user.getToken() + " name: " + user.getName());
+		}
+		if(args[0].toString() == "gtoken" || args[0].toString().equals("gtoken")) {
+			String token = userService.genUserToken();
+			UserDTO user = new UserDTO(token, token, token);
+			userService.saveUser(user);
+			unicastMessage("Token: " + token + "\nUser: " + token + "\nPassword: " + token + "\nChange your data after login");
 		}
 	}	
+	
 	
 	@Override // Thread - code block paralelo
 	public void run() {
