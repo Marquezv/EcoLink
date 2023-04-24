@@ -19,13 +19,15 @@ public class Group implements Serializable {
 	private String groupName;
 	private Integer limit;
 	private String admin;
+	private String admin_id;
 	private List<Map<String, String>> group = new ArrayList<>();
 	
-	public Group(String groupName, Integer limit, String admin) {
+	public Group(String groupName, Integer limit, String admin, String admin_id) {
 		super();
 		this.groupName = groupName;
 		this.limit = limit;
 		this.admin = admin;
+		this.admin_id = admin_id;
 	}
 	
 }
