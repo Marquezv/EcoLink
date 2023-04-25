@@ -1,9 +1,6 @@
 package com.ecolink.dev.client.commands.subcommands;
 
-import java.io.IOException;
-
 import com.ecolink.dev.client.commands.CommandControl;
-import com.ecolink.dev.client.services.ClientService;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -32,12 +29,8 @@ public class SendMessageSubcommads implements Runnable{
 		System.out.println("Running subcommand");
 		System.out.println("Message: " + message);
 		System.out.println("Global: " + global);
-			try {
-				if(message != null) {
-					new ClientService(parent.getSocket()).sendMessage(message);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+			if(message != null) {
+				parent.getClientService().sendString(message);
 			}
 	}
 

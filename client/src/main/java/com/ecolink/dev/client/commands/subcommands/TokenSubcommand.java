@@ -1,9 +1,6 @@
 package com.ecolink.dev.client.commands.subcommands;
 
-import java.io.IOException;
-
 import com.ecolink.dev.client.commands.CommandControl;
-import com.ecolink.dev.client.services.ClientService;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -26,12 +23,8 @@ public class TokenSubcommand implements Runnable{
 
 	@Override
 	public void run() {
-		try {
-			if(genToken) {
-				new ClientService(parent.getSocket()).sendMessage("gtoken");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(genToken) {
+			parent.getClientService().sendString("gtoken");
 		}
 		
  	}

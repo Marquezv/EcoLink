@@ -1,9 +1,6 @@
 package com.ecolink.dev.client.commands.subcommands;
 
-import java.io.IOException;
-
 import com.ecolink.dev.client.commands.CommandControl;
-import com.ecolink.dev.client.services.ClientService;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -46,20 +43,16 @@ public class UserSubcommand implements Runnable{
 	
 	@Override
 	public void run() {
-		try {
-			if(checkCredentials()) {
-				if(login) {
-					String sendLogin = "login " + username + " " + password;
-					new ClientService(parent.getSocket()).sendMessage(sendLogin);
-				}else if(create && token != "" || token != null) {
-					String sendCreate = "create-user" + " " + token + " " + username + " " + password;
-					new ClientService(parent.getSocket()).sendMessage(sendCreate);
-				}else {
-		            System.out.println("Please select either --login or --create");
-				}
+		if(checkCredentials()) {
+			if(login) {
+				String sendLogin = "login " + username + " " + password;
+				parent.getClientService().sendString(sendLogin);
+			}else if(create && token != "" || token != null) {
+				String sendCreate = "create-user" + " " + token + " " + username + " " + password;
+				parent.getClientService().sendString(sendCreate);
+			}else {
+		        System.out.println("Please select either --login or --create");
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		
  	}

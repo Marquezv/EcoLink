@@ -1,9 +1,6 @@
 package com.ecolink.dev.client.commands.subcommands;
 
-import java.io.IOException;
-
 import com.ecolink.dev.client.commands.CommandControl;
-import com.ecolink.dev.client.services.ClientService;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -39,13 +36,9 @@ private CommandLine.Model.CommandSpec spec;
 	
 	@Override
 	public void run() {
-		try {
-			if(checkLogin()) {
-				System.out.println("login " + username + " " + password );
-				new ClientService(parent.getSocket()).sendMessage("login " + username + " " + password );
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(checkLogin()) {
+			String sendLogin = "login " + username + " " + password;
+			parent.getClientService().sendString(sendLogin);
 		}
 	
 	}

@@ -1,9 +1,6 @@
 package com.ecolink.dev.client.commands.subcommands;
 
-import java.io.IOException;
-
 import com.ecolink.dev.client.commands.CommandControl;
-import com.ecolink.dev.client.services.ClientService;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -43,15 +40,11 @@ public class ConfigSubcommand implements Runnable{
 	
 	@Override
 	public void run() {
-		try {
-			if(checkCredentials()) {
-				if(update && token != "" || token != null) {
-					String sendCreate = "update-user " + username + " " + password;
-					new ClientService(parent.getSocket()).sendMessage(sendCreate);
-				}
+		if(checkCredentials()) {
+			if(update && token != "" || token != null) {
+				String sendCreate = "update-user " + username + " " + password;
+				parent.getClientService().sendString(sendCreate);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		
 	}

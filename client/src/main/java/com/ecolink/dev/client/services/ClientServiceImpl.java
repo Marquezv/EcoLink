@@ -1,14 +1,24 @@
 package com.ecolink.dev.client.services;
 
-import java.util.List;
-
-import com.ecolink.dev.client.domain.User;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 
 public class ClientServiceImpl implements ClientService {
-
+	
+	private Socket socket;
+	private BufferedWriter bufferedWriter;
+	
+	public ClientServiceImpl(Socket socket) throws IOException {
+		this.socket = socket;
+		this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())); 
+	}
+	
 	@Override
 	public void sendString(String message) {
 		try {
+
 			bufferedWriter.write(message);
 			bufferedWriter.newLine();
 			bufferedWriter.flush();
@@ -16,18 +26,6 @@ public class ClientServiceImpl implements ClientService {
 			e.printStackTrace();
 		}
 		
-	}
-
-	@Override
-	public List<User> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<User> findOnline() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 }

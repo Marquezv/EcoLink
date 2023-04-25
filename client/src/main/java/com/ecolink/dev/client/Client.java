@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -22,10 +21,10 @@ public class Client {
 	public  Client(Socket socket) {
 		try {
 			this.socket = socket;
-			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
+
 			new CommandLine(new CommandControl(this.socket)).execute("-h");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
 		}
 	}
@@ -41,6 +40,7 @@ public class Client {
 				// Commands
 				new CommandLine(new CommandControl(this.socket)).execute(messageToSend.split(" "));
 			}
+			scanner.close();
 		} catch (Exception e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
 		}

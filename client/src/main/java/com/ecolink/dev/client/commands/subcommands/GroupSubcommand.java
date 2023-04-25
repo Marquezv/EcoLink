@@ -1,9 +1,6 @@
 package com.ecolink.dev.client.commands.subcommands;
 
-import java.io.IOException;
-
 import com.ecolink.dev.client.commands.CommandControl;
-import com.ecolink.dev.client.services.ClientService;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -32,12 +29,8 @@ public class GroupSubcommand implements Runnable{
 		System.out.println("Running subcommand");
 		System.out.println("Group Name: " + groupName);
 		System.out.println("Limit: " + userLimit);
-			try {
-				if(groupName != null && userLimit != 0) {
-					new ClientService(parent.getSocket()).sendMessage("create-group " + groupName + userLimit);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+			if(groupName != null && userLimit != 0) {
+				parent.getClientService().sendString(groupName);
 			}
 	}
 	
