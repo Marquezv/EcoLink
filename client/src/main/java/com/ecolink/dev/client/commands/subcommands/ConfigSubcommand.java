@@ -34,7 +34,7 @@ public class ConfigSubcommand implements Runnable{
 	private boolean ping;
 	
 	private boolean checkCredentials() {
-		if ((username != "" || username != null) && (password != "" || password != null)) {
+		if ((username != "" || username != null) && (password != "" || password != null) && (token != "" || token != null)) {
 			return true;
 		}
 		return false;
@@ -42,11 +42,10 @@ public class ConfigSubcommand implements Runnable{
 		
 	@Override
 	public void run() {
-		if(checkCredentials() && parent.isLoged()) {
-			if(update && token != "" || token != null) {
-				String sendCreate = "update-user " + username + " " + password;
-				parent.getClientService().sendString(sendCreate);
-			}
+
+		if(checkCredentials()) {
+			String sendCreate = "update-user " + username + " " + password;
+			parent.getClientService().sendString(sendCreate);
 		}
 		
 	}

@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import com.ecolink.dev.server.domain.entity.User;
 
+import lombok.ToString;
+
+@ToString
 public class UserDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;

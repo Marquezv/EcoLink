@@ -47,8 +47,6 @@ public class UserSubcommand implements Runnable{
 			if(login) {
 				String sendLogin = "login " + username + " " + password;
 				parent.getClientService().sendString(sendLogin);
-				if(parent.getClientService().responseBoolean()) {
-				}
 			}else if(create && token != "" || token != null) {
 				String sendCreate = "create-user" + " " + token + " " + username + " " + password;
 				parent.getClientService().sendString(sendCreate);
