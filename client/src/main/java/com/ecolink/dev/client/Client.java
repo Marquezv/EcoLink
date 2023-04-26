@@ -46,26 +46,17 @@ public class Client {
 		}
 	}
 	
-	public boolean loged() {
-		if(user.equals(null)) {
-			return false;
-		}
-		System.out.println(user);
-		return true;
-	}
-	
 	public void listenForMessage() {
 		
 		new Thread(new Runnable(){
 			@Override
 			public void run() {
-				
+
 				String msgFromGroupChat;
 				while(socket.isConnected()) {
 					try {
-						loged();
-						
 						msgFromGroupChat = bufferedReader.readLine();
+						
 						if(msgFromGroupChat != null) System.out.println(msgFromGroupChat);
 						
 					}catch (IOException e) {
@@ -100,6 +91,7 @@ public class Client {
 		System.out.println("Welcome to EcoLinkCLI");
 		Socket socket = new Socket("localhost", 7000);
 		Client client = new Client(socket);
+		client.listenForMessage();
 		client.sendMessage();
 		
 	}

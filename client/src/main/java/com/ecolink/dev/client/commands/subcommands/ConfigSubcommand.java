@@ -24,10 +24,10 @@ public class ConfigSubcommand implements Runnable{
 	@Option(names = {"-tk", "--token"}, description = "Your Token")
 	private String token;
 	
-	@Option(names = {"-u", "--username"}, description = "Your Username")
+	@Option(names = {"-u", "--username"}, description = "Your New Username")
 	private String username;
 	
-	@Option(names = {"-p", "--password"}, description = "Your Password", required = true)
+	@Option(names = {"-p", "--password"}, description = "Your New Password")
 	private String password;
 	
 	@Option(names = {"ping"}, description = "Ping Server")

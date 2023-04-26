@@ -46,7 +46,6 @@ public class ClientHandler implements Runnable{
     
 
 	public void unicastMessage(String messageToSend) {
-			if(userDTO == null)  messageToSend = "User not found!";
 			try {
 				bufferedWriter.write("[SERVER] - " + messageToSend);
 				bufferedWriter.newLine();
@@ -141,12 +140,19 @@ public class ClientHandler implements Runnable{
 			unicastMessage("[Created] token: " + user.getToken() + " name: " + user.getName());
 		}
 		if(args[0].toString() == "update-user" || args[0].toString().equals("update-user")) {
-			UserDTO user = userService.login(args[1], args[2]);
-			user.setName(args[1]);
-			user.setPassword(args[2]);
-			System.out.println();
-			userService.saveUser(user);
-			unicastMessage("[Update] token: " + user.getToken() + " name: " + user.getName());
+			System.out.println("Update " );
+			unicastMessage("Update");
+			System.out.println(userDTO == null);
+			if( userDTO != null) {
+				userDTO.setName(args[1]);
+				userDTO.setPassword(args[2]);
+				userService.updateUser(userDTO);
+				unicastMessage("[Update] token: " + userDTO.getToken() + " name: " + userDTO.getName());
+			} else {
+				System.out.println("User not loged");
+				unicastMessage("User not loged");
+			}
+			
 		}
 		if(args[0].toString() == "gtoken" || args[0].toString().equals("gtoken")) {
 			String token = userService.genUserToken();
@@ -166,7 +172,6 @@ public class ClientHandler implements Runnable{
 				String[] msgArray = messageFromClient.split("\\s");
 				System.out.println(findAllUsersOnline());
 				listener(msgArray);
-				System.out.println(clientStatus());
 //				broadcastMessage(messageFromClient);
 				
 			}	

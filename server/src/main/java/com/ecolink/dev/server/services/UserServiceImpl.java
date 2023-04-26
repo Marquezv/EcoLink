@@ -57,4 +57,9 @@ public class UserServiceImpl implements UserService{
 	    return UUID.randomUUID().toString().substring(0, 5);
 	}
 
+	@Override
+	public void updateUser(UserDTO userDTO) throws Exception {
+		userDao.update(userDTO.toUser());
+	}
+
 }

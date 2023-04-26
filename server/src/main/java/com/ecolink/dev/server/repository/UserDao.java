@@ -86,7 +86,7 @@ public class UserDao implements JdbcDao<User> {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
         	statement.setString(1, user.getName());
         	statement.setString(2, user.getPassword());
-        	statement.setString(3, user.getId());
+        	statement.setString(3, user.getToken());
         	statement.executeUpdate();
         }
 	}

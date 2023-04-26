@@ -9,6 +9,7 @@ public interface UserService {
 	 public UserDTO getUserByToken(String token) throws Exception;
 	 public List<UserDTO> getAllUsers() throws Exception;
 	 public void saveUser(UserDTO user) throws Exception;
+	 public void updateUser(UserDTO user) throws Exception;
 	 public void deleteUser(String token) throws Exception;
 	 public UserDTO login(String token, String password) throws Exception;
 	 public String genUserToken();
