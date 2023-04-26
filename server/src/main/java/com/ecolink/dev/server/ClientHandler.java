@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.ecolink.dev.server.domain.UserDTO;
 import com.ecolink.dev.server.repository.UserDao;
@@ -33,6 +34,7 @@ public class ClientHandler implements Runnable{
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.userService = new UserServiceImpl(new UserDao());
 		    startSession();
+		    clientHandlers.add(this);
 		}catch (Exception e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
@@ -44,9 +46,9 @@ public class ClientHandler implements Runnable{
     
 
 	public void unicastMessage(String messageToSend) {
-		
+			if(userDTO == null)  messageToSend = "User not found!";
 			try {
-				bufferedWriter.write("[SERVER]: "+ messageToSend);
+				bufferedWriter.write("[SERVER] - " + messageToSend);
 				bufferedWriter.newLine();
 				bufferedWriter.flush();
 			} catch (IOException e) {
@@ -85,15 +87,35 @@ public class ClientHandler implements Runnable{
         }
 	}
 	
-	public boolean clientStatus() throws IOException {
-		if(bufferedReader.read() == -1) {
-			return true;
+	public List<String> findAllUsersOnline() {
+		List<String> users = new ArrayList<>();
+		for(ClientHandler clientHandler : clientHandlers) {
+			try {
+				if(clientHandler.clientStatus()) {
+					users.add("token:" + clientHandler.userDTO.getToken() + "|user:" + clientHandler.userDTO.getName() );
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		return false;
+		return users;
+	}
+	
+	public boolean clientStatus() throws IOException {
+		if(userDTO == null || userDTO.equals(null)) {
+			return false;
+		}
+		return true;
 	}
 
 	
 	public void listener(String...args) throws Exception {
+		if(args[0].toString() == "loged" || args[0].toString().equals("loged")) {
+			String loged = "false";
+			if(this.userDTO != null) loged = "true";
+			System.out.println(loged);
+			unicastMessage(loged);
+		}
 		if(args[0].toString() == "ping" || args[0].toString().equals("ping")) {
 			boolean loged = false;
 			if(this.userDTO != null) loged = true;
@@ -103,7 +125,7 @@ public class ClientHandler implements Runnable{
 			String token = args[1].toString();
 			String password = args[2].toString();
 			try {
-				this.userDTO = userService.login(token, password);
+				userDTO = userService.login(token, password);
 				unicastMessage("[LOGED] token: " + userDTO.getToken() + " user: " + userDTO.getName());
 			} catch (Exception e) {
 				unicastMessage("[ERROR] token: " + token + " NOT FOUND");
@@ -122,6 +144,7 @@ public class ClientHandler implements Runnable{
 			UserDTO user = userService.login(args[1], args[2]);
 			user.setName(args[1]);
 			user.setPassword(args[2]);
+			System.out.println();
 			userService.saveUser(user);
 			unicastMessage("[Update] token: " + user.getToken() + " name: " + user.getName());
 		}
@@ -139,14 +162,11 @@ public class ClientHandler implements Runnable{
 		String messageFromClient;
 		try {
 			while(socket.isConnected()) {
-				//Commad Reciver
-				//Commad Reciver
 				messageFromClient = bufferedReader.readLine();
 				String[] msgArray = messageFromClient.split("\\s");
-				System.out.println(msgArray);
-				System.out.println(msgArray.length);
+				System.out.println(findAllUsersOnline());
 				listener(msgArray);
-//				System.out.println(clientStatus());
+				System.out.println(clientStatus());
 //				broadcastMessage(messageFromClient);
 				
 			}	

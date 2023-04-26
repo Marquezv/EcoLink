@@ -32,13 +32,13 @@ public class CommandControl{
 	private Socket socket;
 	private ClientService clientService;
 	private User user;
-
+	
+	
 	public CommandControl(Socket socket) {
 		try {
 			this.socket = socket;
 			this.clientService = new ClientServiceImpl(socket);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

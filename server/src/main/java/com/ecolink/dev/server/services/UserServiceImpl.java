@@ -22,10 +22,6 @@ public class UserServiceImpl implements UserService{
 		User user =  userDao.findByToken(token);
 		System.out.println(user);
 		
-		System.out.println("Token - " + token);
-		System.out.println(user.getPassword());
-		System.out.println(user.getPassword().equals(password));
-
 		if(user.getPassword().equals(password)) {
 			return user.toDTO();
 		}

@@ -28,8 +28,7 @@ public class Client {
 			closeEverything(socket, bufferedReader, bufferedWriter);
 		}
 	}
-	
-	
+
 	
 	public void sendMessage() {
 		try {
@@ -57,7 +56,6 @@ public class Client {
 				while(socket.isConnected()) {
 					try {
 						msgFromGroupChat = bufferedReader.readLine();
-						
 						if(msgFromGroupChat != null) System.out.println(msgFromGroupChat);
 						
 					}catch (IOException e) {
@@ -87,12 +85,11 @@ public class Client {
 		}
 		System.out.println("Closed");
 	}
-	
+
 	public static void main(String[] args) throws IOException {
 		System.out.println("Welcome to EcoLinkCLI");
 		Socket socket = new Socket("localhost", 7000);
 		Client client = new Client(socket);
-		client.listenForMessage();
 		client.sendMessage();
 		
 	}
