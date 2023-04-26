@@ -7,7 +7,6 @@ import com.ecolink.dev.client.commands.subcommands.ConfigSubcommand;
 import com.ecolink.dev.client.commands.subcommands.SendMessageSubcommads;
 import com.ecolink.dev.client.commands.subcommands.TokenSubcommand;
 import com.ecolink.dev.client.commands.subcommands.UserSubcommand;
-import com.ecolink.dev.client.domain.User;
 import com.ecolink.dev.client.services.ClientService;
 import com.ecolink.dev.client.services.ClientServiceImpl;
 
@@ -31,8 +30,8 @@ public class CommandControl{
 	
 	private Socket socket;
 	private ClientService clientService;
-	private User user;
-
+	private boolean loged;
+	
 	public CommandControl(Socket socket) {
 		try {
 			this.socket = socket;

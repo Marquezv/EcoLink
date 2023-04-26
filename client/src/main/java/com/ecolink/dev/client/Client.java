@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import com.ecolink.dev.client.commands.CommandControl;
+import com.ecolink.dev.client.domain.User;
 
 import picocli.CommandLine;
 
@@ -17,6 +18,7 @@ public class Client {
 	private Socket socket;
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
+	private User user;
 	
 	public  Client(Socket socket) {
 		try {
@@ -28,7 +30,6 @@ public class Client {
 			closeEverything(socket, bufferedReader, bufferedWriter);
 		}
 	}
-	
 	
 	
 	public void sendMessage() {
@@ -46,16 +47,25 @@ public class Client {
 		}
 	}
 	
+	public boolean loged() {
+		if(user.equals(null)) {
+			return false;
+		}
+		System.out.println(user);
+		return true;
+	}
 	
 	public void listenForMessage() {
 		
 		new Thread(new Runnable(){
 			@Override
 			public void run() {
-
+				
 				String msgFromGroupChat;
 				while(socket.isConnected()) {
 					try {
+						loged();
+						
 						msgFromGroupChat = bufferedReader.readLine();
 						
 						if(msgFromGroupChat != null) System.out.println(msgFromGroupChat);

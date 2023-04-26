@@ -24,11 +24,14 @@ public class ConfigSubcommand implements Runnable{
 	@Option(names = {"-tk", "--token"}, description = "Your Token")
 	private String token;
 	
-	@Option(names = {"-u", "--username"}, description = "Your Username", required = true)
+	@Option(names = {"-u", "--username"}, description = "Your Username")
 	private String username;
 	
 	@Option(names = {"-p", "--password"}, description = "Your Password", required = true)
 	private String password;
+	
+	@Option(names = {"ping"}, description = "Ping Server")
+	private boolean ping;
 	
 	private boolean checkCredentials() {
 		if ((username != "" || username != null) && (password != "" || password != null)) {
@@ -37,10 +40,9 @@ public class ConfigSubcommand implements Runnable{
 		return false;
 	}
 		
-	
 	@Override
 	public void run() {
-		if(checkCredentials()) {
+		if(checkCredentials() && parent.isLoged()) {
 			if(update && token != "" || token != null) {
 				String sendCreate = "update-user " + username + " " + password;
 				parent.getClientService().sendString(sendCreate);
