@@ -198,6 +198,10 @@ public class ClientHandler implements Runnable{
 			List<String> users = findAllUsersOnline();
 			unicastMessage(formatList(users));
 		}
+		
+		//Group Comands
+		
+		
 	}	
 	
 	

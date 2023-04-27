@@ -10,7 +10,7 @@ import picocli.CommandLine.Spec;
 
 @Command(name = "send-message",
 	mixinStandardHelpOptions = true)
-public class SendMessageSubcommads implements Runnable{
+public class SendMessageSubcommand implements Runnable{
 	
 	@ParentCommand
 	private CommandControl parent;

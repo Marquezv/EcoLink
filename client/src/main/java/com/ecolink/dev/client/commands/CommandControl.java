@@ -5,7 +5,7 @@ import java.net.Socket;
 
 import com.ecolink.dev.client.commands.subcommands.ConfigSubcommand;
 import com.ecolink.dev.client.commands.subcommands.ListSubcommand;
-import com.ecolink.dev.client.commands.subcommands.SendMessageSubcommads;
+import com.ecolink.dev.client.commands.subcommands.SendMessageSubcommand;
 import com.ecolink.dev.client.commands.subcommands.TokenSubcommand;
 import com.ecolink.dev.client.commands.subcommands.UserSubcommand;
 import com.ecolink.dev.client.services.ClientService;
@@ -22,7 +22,7 @@ import picocli.CommandLine.Spec;
 	description = "Send commands to EcoLink Server",
 	mixinStandardHelpOptions = true,
 	subcommands = {
-			SendMessageSubcommads.class,
+			SendMessageSubcommand.class,
 			UserSubcommand.class,
 			TokenSubcommand.class,
 			ConfigSubcommand.class,

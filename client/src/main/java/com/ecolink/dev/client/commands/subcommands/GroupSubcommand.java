@@ -8,31 +8,25 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.ParentCommand;
 import picocli.CommandLine.Spec;
 
-@Command(name = "list",
+@Command(name = "group",
 	mixinStandardHelpOptions = true)
-public class ListSubcommand implements Runnable {
+public class GroupSubcommand implements Runnable {
 	
-
 	@ParentCommand
 	private CommandControl parent;
 	
 	@Spec
 	private CommandLine.Model.CommandSpec spec;
 	
+	@Option(names = {"--create"}, description = "Create group")
+	private boolean create;
 	
-	@Option(names = {"--online"}, description = "Online")
+	@Option(names = {"--list"}, description = "List users in that group")
 	private boolean login;
-	
-	@Option(names = {"--group"}, description = "Group")
-	private boolean group;
 	
 	@Override
 	public void run() {
-		if(login) {
-			String sendListUserOnline = "list online";
-			parent.getClientService().sendString(sendListUserOnline);
-		}
+		
 	}
-	
 	
 }
