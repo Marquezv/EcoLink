@@ -17,20 +17,31 @@ public class SendMessageSubcommads implements Runnable{
 	
 	@Spec
 	private CommandLine.Model.CommandSpec spec;
-	
+	//Pensar em espaco
 	@Option(names = {"-m", "--message"}, description = "Your message", required=true)
 	private String message;
 	
 	@Option(names = {"-g", "--global"}, description = "Send to Global")
 	private boolean global;
 	
+	@Option(names = {"-tk", "--token-user"}, description = "Token to send message")
+	String tkUser;
+	
+	@Option(names = {"-gp", "--group"}, description = "Send to group")
+	String tkGroup;
+	
 	@Override
 	public void run() {
 		System.out.println("Running subcommand");
 		System.out.println("Message: " + message);
 		System.out.println("Global: " + global);
-			if(message != null) {
-				parent.getClientService().sendString(message);
+		System.out.println("tkUser: " + tkUser);
+			if(message != null && global) {
+				String msg = "send-string " + global + " "+ message;
+				parent.getClientService().sendString(msg);
+			}else if(message != null && !global && tkUser != null) {
+				String msg = "send-string " + global + " "+ tkUser + " "+ message;
+				parent.getClientService().sendString(msg);
 			}
 	}
 

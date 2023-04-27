@@ -7,7 +7,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.ecolink.dev.server.domain.UserDTO;
 import com.ecolink.dev.server.repository.UserDao;
@@ -24,7 +26,7 @@ public class ClientHandler implements Runnable{
 	
 	private UserDTO userDTO;
     private UserService userService;
-    
+    // Filas de mensagens apos logar ler as mensagens na fila
 	public ClientHandler(Socket socket) {
 		try {
 			// Write - Char
@@ -56,6 +58,24 @@ public class ClientHandler implements Runnable{
 		
 	}
 	
+	public void sendToTokens(String messageToSend, String tkUser) {
+		for(ClientHandler clientHandler : clientHandlers) {
+			try {
+				System.out.println(tkUser);
+				System.out.println(clientHandler.userDTO.getToken());
+				System.out.println(clientHandler.userDTO.getToken().equals(tkUser));
+				if(clientHandler.userDTO.getToken().equals(tkUser)) {
+					bufferedWriter.write("["+ userDTO.getToken() + "|" + userDTO.getName() +"] - " + messageToSend);
+					bufferedWriter.newLine();
+					bufferedWriter.flush();
+				}
+			}catch (Exception e) {
+				closeEverything(socket, bufferedReader, bufferedWriter);
+			}
+			
+		}
+	}
+	
 	public void broadcastMessage(String messageToSend) {
 		for (ClientHandler clientHandler: clientHandlers) {
 			try {
@@ -65,7 +85,7 @@ public class ClientHandler implements Runnable{
 					clientHandler.bufferedWriter.flush();
 				}
 			} catch (IOException e) {
-				closeEverything(socket, bufferedReader, bufferedWriter);
+				unicastMessage("Client not logged");
 			}
 		}
 	}
@@ -100,6 +120,11 @@ public class ClientHandler implements Runnable{
 		return users;
 	}
 	
+	public String formatList(List<String> list) {
+		return list.stream().map(item -> "\n* " + item)
+				.collect(Collectors.joining("\n"));
+	}
+	
 	public boolean clientStatus() throws IOException {
 		if(userDTO == null || userDTO.equals(null)) {
 			return false;
@@ -109,10 +134,21 @@ public class ClientHandler implements Runnable{
 
 	
 	public void listener(String...args) throws Exception {
+		if(args[0].toString() == "send-string" || args[0].toString().equals("send-string")) {
+			System.out.println(String.join(" ", args));
+			String global = args[1].toString();
+			String [] substring = Arrays.copyOfRange(args, 3, args.length);
+			String message = String.join(" ", substring);
+			String token = args[2].toString();
+			if(global == "true" || global.equals("true")) {
+				broadcastMessage(message);
+			}
+			System.out.println("Message to: " + token);
+			sendToTokens(message, token);
+		}
 		if(args[0].toString() == "loged" || args[0].toString().equals("loged")) {
 			String loged = "false";
 			if(this.userDTO != null) loged = "true";
-			System.out.println(loged);
 			unicastMessage(loged);
 		}
 		if(args[0].toString() == "ping" || args[0].toString().equals("ping")) {
@@ -160,6 +196,12 @@ public class ClientHandler implements Runnable{
 			userService.saveUser(user);
 			unicastMessage("Token: " + token + "\nUser: " + token + "\nPassword: " + token + "\nChange your data after login");
 		}
+		if(args[0].toString() == "list" || args[0].toString().equals("list")) {
+//			if(args[1].toString() == "online" || args[1].toString().equals("online")) 
+				
+			List<String> users = findAllUsersOnline();
+			unicastMessage(formatList(users));
+		}
 	}	
 	
 	
@@ -170,7 +212,6 @@ public class ClientHandler implements Runnable{
 			while(socket.isConnected()) {
 				messageFromClient = bufferedReader.readLine();
 				String[] msgArray = messageFromClient.split("\\s");
-				System.out.println(findAllUsersOnline());
 				listener(msgArray);
 //				broadcastMessage(messageFromClient);
 				

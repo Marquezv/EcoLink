@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import com.ecolink.dev.client.commands.subcommands.ConfigSubcommand;
+import com.ecolink.dev.client.commands.subcommands.ListSubcommand;
 import com.ecolink.dev.client.commands.subcommands.SendMessageSubcommads;
 import com.ecolink.dev.client.commands.subcommands.TokenSubcommand;
 import com.ecolink.dev.client.commands.subcommands.UserSubcommand;
@@ -24,7 +25,8 @@ import picocli.CommandLine.Spec;
 			SendMessageSubcommads.class,
 			UserSubcommand.class,
 			TokenSubcommand.class,
-			ConfigSubcommand.class})
+			ConfigSubcommand.class,
+			ListSubcommand.class})
 public class CommandControl{
 	@Spec CommandSpec spec;
 	

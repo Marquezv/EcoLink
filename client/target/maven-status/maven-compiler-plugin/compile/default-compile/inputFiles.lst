@@ -8,3 +8,4 @@
 /home/vm/EcoLink/client/src/main/java/com/ecolink/dev/client/domain/User.java
 /home/vm/EcoLink/client/src/main/java/com/ecolink/dev/client/commands/subcommands/TokenSubcommand.java
 /home/vm/EcoLink/client/src/main/java/com/ecolink/dev/client/commands/CommandControl.java
+/home/vm/EcoLink/client/src/main/java/com/ecolink/dev/client/commands/subcommands/ListSubcommand.java
