@@ -32,15 +32,12 @@ public class SendMessageSubcommads implements Runnable{
 	
 	@Override
 	public void run() {
-		System.out.println("Running subcommand");
 		System.out.println("Message: " + message);
 		System.out.println("Global: " + global);
 		System.out.println("tkUser: " + tkUser);
-			if(message != null && global) {
-				String msg = "send-string " + global + " "+ message;
-				parent.getClientService().sendString(msg);
-			}else if(message != null && !global && tkUser != null) {
+			if(message != null) {
 				String msg = "send-string " + global + " "+ tkUser + " "+ message;
+				System.out.println(msg);
 				parent.getClientService().sendString(msg);
 			}
 	}

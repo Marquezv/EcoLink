@@ -57,20 +57,18 @@ public class ClientHandler implements Runnable{
 			}
 		
 	}
-	
+	// CLIENT -> SERVER(READ) -> TO_CLIENT
 	public void sendToTokens(String messageToSend, String tkUser) {
 		for(ClientHandler clientHandler : clientHandlers) {
 			try {
-				System.out.println(tkUser);
-				System.out.println(clientHandler.userDTO.getToken());
-				System.out.println(clientHandler.userDTO.getToken().equals(tkUser));
 				if(clientHandler.userDTO.getToken().equals(tkUser)) {
-					bufferedWriter.write("["+ userDTO.getToken() + "|" + userDTO.getName() +"] - " + messageToSend);
-					bufferedWriter.newLine();
-					bufferedWriter.flush();
+					clientHandler.bufferedWriter.write("["+ userDTO.getToken() + "|" + userDTO.getName() +"] - " + messageToSend);
+					clientHandler.bufferedWriter.newLine();
+					clientHandler.bufferedWriter.flush();
 				}
 			}catch (Exception e) {
-				closeEverything(socket, bufferedReader, bufferedWriter);
+				unicastMessage("User not loged");
+//				closeEverything(socket, bufferedReader, bufferedWriter);
 			}
 			
 		}
@@ -135,7 +133,6 @@ public class ClientHandler implements Runnable{
 	
 	public void listener(String...args) throws Exception {
 		if(args[0].toString() == "send-string" || args[0].toString().equals("send-string")) {
-			System.out.println(String.join(" ", args));
 			String global = args[1].toString();
 			String [] substring = Arrays.copyOfRange(args, 3, args.length);
 			String message = String.join(" ", substring);
@@ -143,7 +140,6 @@ public class ClientHandler implements Runnable{
 			if(global == "true" || global.equals("true")) {
 				broadcastMessage(message);
 			}
-			System.out.println("Message to: " + token);
 			sendToTokens(message, token);
 		}
 		if(args[0].toString() == "loged" || args[0].toString().equals("loged")) {
