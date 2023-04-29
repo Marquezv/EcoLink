@@ -12,20 +12,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.ecolink.dev.server.domain.UserDTO;
-import com.ecolink.dev.server.repository.UserDao;
-import com.ecolink.dev.server.services.UserService;
-import com.ecolink.dev.server.services.UserServiceImpl;
+import com.ecolink.dev.server.utils.ListenerFactory;
+import com.ecolink.dev.server.utils.ListenerFunction;
 
 public class ClientHandler implements Runnable{
-	
 	
 	public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
 	private Socket socket;
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
-	
 	private UserDTO userDTO;
-    private UserService userService;
+
     // Filas de mensagens apos logar ler as mensagens na fila
 	public ClientHandler(Socket socket) {
 		try {
@@ -34,18 +31,23 @@ public class ClientHandler implements Runnable{
 			this.socket = socket;
 			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.userService = new UserServiceImpl(new UserDao());
-		    startSession();
 		    clientHandlers.add(this);
 		}catch (Exception e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
 	}
 	
-    public void startSession() throws Exception{
-        unicastMessage("Conneted to EcoLink");
-    }	
-    
+	public BufferedWriter getBufferedWriter() {
+		return bufferedWriter;
+	}
+
+	public UserDTO getUserDTO() {
+		return userDTO;
+	}
+
+	public void setUserDTO(UserDTO userDTO) {
+		this.userDTO = userDTO;
+	}
 
 	public void unicastMessage(String messageToSend) {
 			try {
@@ -132,6 +134,7 @@ public class ClientHandler implements Runnable{
 
 	
 	public void listener(String...args) throws Exception {
+		
 		if(args[0].toString() == "send-string" || args[0].toString().equals("send-string")) {
 			String global = args[1].toString();
 			String [] substring = Arrays.copyOfRange(args, 3, args.length);
@@ -142,56 +145,7 @@ public class ClientHandler implements Runnable{
 			}
 			sendToTokens(message, token);
 		}
-		if(args[0].toString() == "loged" || args[0].toString().equals("loged")) {
-			String loged = "false";
-			if(this.userDTO != null) loged = "true";
-			unicastMessage(loged);
-		}
-		if(args[0].toString() == "ping" || args[0].toString().equals("ping")) {
-			boolean loged = false;
-			if(this.userDTO != null) loged = true;
-			unicastMessage("[CONFIG] Server UP \nLoged: " + loged);
-		}
-		if(args[0].toString() == "login" || args[0].toString().equals("login")) {
-			String token = args[1].toString();
-			String password = args[2].toString();
-			try {
-				userDTO = userService.login(token, password);
-				unicastMessage("[LOGED] token: " + userDTO.getToken() + " user: " + userDTO.getName());
-			} catch (Exception e) {
-				unicastMessage("[ERROR] token: " + token + " NOT FOUND");
-			}
-			
-		}
-		if(args[0].toString() == "create-user" || args[0].toString().equals("create-user")) {
-			String token = args[1].toString();
-			String username = args[2].toString();
-			String password = args[3].toString();
-			UserDTO user = new UserDTO(token, username, password);
-			userService.saveUser(user);
-			unicastMessage("[Created] token: " + user.getToken() + " name: " + user.getName());
-		}
-		if(args[0].toString() == "update-user" || args[0].toString().equals("update-user")) {
-			System.out.println("Update " );
-			unicastMessage("Update");
-			System.out.println(userDTO == null);
-			if( userDTO != null) {
-				userDTO.setName(args[1]);
-				userDTO.setPassword(args[2]);
-				userService.updateUser(userDTO);
-				unicastMessage("[Update] token: " + userDTO.getToken() + " name: " + userDTO.getName());
-			} else {
-				System.out.println("User not loged");
-				unicastMessage("User not loged");
-			}
-			
-		}
-		if(args[0].toString() == "gtoken" || args[0].toString().equals("gtoken")) {
-			String token = userService.genUserToken();
-			UserDTO user = new UserDTO(token, token, token);
-			userService.saveUser(user);
-			unicastMessage("Token: " + token + "\nUser: " + token + "\nPassword: " + token + "\nChange your data after login");
-		}
+		
 		if(args[0].toString() == "list" || args[0].toString().equals("list")) {
 			if(args[1].toString() == "online" || args[1].toString().equals("online")) {
 				List<String> users = findAllUsersOnline();
@@ -203,9 +157,6 @@ public class ClientHandler implements Runnable{
 			
 		}
 		
-		//Group Comands
-		
-		
 	}	
 	
 	
@@ -216,7 +167,13 @@ public class ClientHandler implements Runnable{
 			while(socket.isConnected()) {
 				messageFromClient = bufferedReader.readLine();
 				String[] msgArray = messageFromClient.split("\\s");
-				listener(msgArray);
+
+				System.out.println(messageFromClient);
+				
+				ListenerFactory factory = new ListenerFactory();
+				ListenerFunction function = factory.createStringFunction(this, msgArray);
+				function.apply(msgArray);
+//				listener(msgArray);
 //				broadcastMessage(messageFromClient);
 				
 			}	

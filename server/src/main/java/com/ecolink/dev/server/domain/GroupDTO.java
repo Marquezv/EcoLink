@@ -1,9 +1,6 @@
 package com.ecolink.dev.server.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,18 +13,23 @@ public class GroupDTO implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private String groupName;
-	private Integer limit;
+	private String id;
+	private String token;
+	private String name;
+	private String password;
 	private String tkAdmin;
-	private List<Map<String, String>> users = new ArrayList<>();
+	private Integer userLimit;
 	
-	public GroupDTO(String groupName, Integer limit, String admin, String tkAdmin) {
+	public GroupDTO(String id, String token, String name, String password, String tkAdmin, Integer userLimit) {
 		super();
-		this.groupName = groupName;
-		this.limit = limit;
+		this.id = id;
+		this.token = token;
+		this.name = name;
+		this.password = password;
 		this.tkAdmin = tkAdmin;
+		this.userLimit = userLimit;
 	}
-	
+
 }
 
 

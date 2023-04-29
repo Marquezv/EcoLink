@@ -10,5 +10,4 @@ public interface JdbcDao<T> {
     void save(T entity) throws SQLException;
     void update(T entity) throws SQLException;
     void deleteByToken(String token) throws SQLException;
-	
 }

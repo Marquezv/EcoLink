@@ -7,42 +7,42 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ecolink.dev.server.domain.entity.User;
+import com.ecolink.dev.server.domain.entity.Group;
 import com.ecolink.dev.server.persistence.JdbcDao;
 import com.ecolink.dev.server.utils.ConnectJDBC;
 
-public class UserDao implements JdbcDao<User> {
+public class GroupDao implements JdbcDao<Group> {
 	
 	
-	User user;
+	Group group;
 	
 	
 	@Override
-	public List<User> findAll() throws SQLException {
-		List<User> users = new ArrayList<>();
-		String query = "SELECT * FROM users";
+	public List<Group> findAll() throws SQLException {
+		List<Group> groups = new ArrayList<>();
+		String query = "SELECT * FROM groups";
 		try(Connection conn = ConnectJDBC.connectDB()) {
 			PreparedStatement statement = conn.prepareStatement(query);
 			ResultSet resultSet = statement.executeQuery();
 			while(resultSet.next()) {
-				User user = mapRowToUser(resultSet);
-				users.add(user);
+				Group group = mapRowToUser(resultSet);
+				groups.add(group);
 			}
 		}
 
-		return users;
+		return groups;
 	}
 	
 	@Override
-	public User findByToken(String token) throws SQLException {
-		String query = "SELECT * FROM users WHERE token=?";
+	public Group findByToken(String token) throws SQLException {
+		String query = "SELECT * FROM groups WHERE token=?";
 		Connection connection = ConnectJDBC.connectDB();
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setString(1, token);
 			try(ResultSet resultSet = statement.executeQuery()){
 				if(resultSet.next()) {
-					User user = mapRowToUser(resultSet);
-					return user;
+					Group group = mapRowToUser(resultSet);
+					return group;
 				}
 			}
 		}
@@ -50,14 +50,16 @@ public class UserDao implements JdbcDao<User> {
 	}
 	
 	@Override
-	public void save(User user) throws SQLException {
-        String query = "INSERT INTO users (id, token, name, password) VALUES (?, ?, ?, ?)";
+	public void save(Group group) throws SQLException {
+        String query = "INSERT INTO groups (id, token, name, password, tkAdmin, userLimit) VALUES (?, ?, ?, ?, ?, ?)";
 		Connection connection = ConnectJDBC.connectDB();
         try(PreparedStatement statement = connection.prepareStatement(query)) {
-        	statement.setString(1, user.getId());
-        	statement.setString(2, user.getToken());
-        	statement.setString(3, user.getName());
-        	statement.setString(4, user.getPassword());
+        	statement.setString(1, group.getId());
+        	statement.setString(2, group.getToken());
+        	statement.setString(3, group.getName());
+        	statement.setString(4, group.getPassword());
+        	statement.setString(5, group.getTkAdmin());
+        	statement.setInt(6, group.getUserLimit());
         	statement.executeUpdate();
         	System.out.println("SAVED");
         }
@@ -65,20 +67,21 @@ public class UserDao implements JdbcDao<User> {
 	}
 
 	@Override
-	public void update(User user) throws SQLException {
-        String query = "UPDATE users SET name=?, password=? WHERE token=?";
+	public void update(Group group) throws SQLException {
+        String query = "UPDATE groups SET name=?, password=? WHERE token=?";
 		Connection connection = ConnectJDBC.connectDB();
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-        	statement.setString(1, user.getName());
-        	statement.setString(2, user.getPassword());
-        	statement.setString(3, user.getToken());
+        	statement.setString(1, group.getName());
+        	statement.setString(2, group.getPassword());
+        	statement.setString(3, group.getToken());
+        	statement.setInt(4, group.getUserLimit());
         	statement.executeUpdate();
         }
 	}
 
 	@Override
 	public void deleteByToken(String token) throws SQLException {
-        String query = "DELETE FROM users WHERE token=?";
+        String query = "DELETE FROM groups WHERE token=?";
 		Connection connection = ConnectJDBC.connectDB();
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, token);
@@ -86,12 +89,14 @@ public class UserDao implements JdbcDao<User> {
         }
 	}
 	
-	private User mapRowToUser(ResultSet resultSet) throws SQLException {
+	private Group mapRowToUser(ResultSet resultSet) throws SQLException {
         String id = resultSet.getString("id");
         String token = resultSet.getString("token");
         String name = resultSet.getString("name");
         String password = resultSet.getString("password");
-        return new User(id, token, name, password);
+        String tkAdmin = resultSet.getString("tkAdmin");
+        Integer userLimit = resultSet.getInt("userLimit");
+        return new Group(id, token, name, password, tkAdmin, userLimit);
     }
 
 

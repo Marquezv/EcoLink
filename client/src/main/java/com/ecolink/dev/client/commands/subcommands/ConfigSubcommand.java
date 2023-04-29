@@ -44,7 +44,7 @@ public class ConfigSubcommand implements Runnable{
 	public void run() {
 
 		if(checkCredentials()) {
-			String sendCreate = "update-user " + username + " " + password;
+			String sendCreate = "user update-user " + username + " " + password;
 			parent.getClientService().sendString(sendCreate);
 		}
 		

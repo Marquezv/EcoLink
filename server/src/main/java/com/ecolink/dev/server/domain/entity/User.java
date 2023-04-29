@@ -20,7 +20,7 @@ public class User {
 	
 	public User(String id, String token, String name, String password) {
 		super();
-		this.id = UUID.randomUUID().toString();
+		this.id = UUID.randomUUID().toString().substring(0, 10);
 		this.token = token;
 		this.name = name;
 		this.password = password;

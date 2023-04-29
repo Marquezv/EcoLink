@@ -24,17 +24,17 @@ public class UserSubcommand implements Runnable{
 	@Option(names = {"--create"}, description = "Create User")
 	private boolean create;
 
-	@Option(names = {"-tk", "--token"}, description = "Your Token")
+	@Option(names = {"-tk", "--token"}, description = "Your Token", required = true)
 	private String token;
 	
-	@Option(names = {"-u", "--username"}, description = "Your Username", required = true)
+	@Option(names = {"-u", "--username"}, description = "Your Username")
 	private String username;
 	
 	@Option(names = {"-p", "--password"}, description = "Your Password", required = true)
 	private String password;
 	
 	private boolean checkCredentials() {
-		if ((username != "" || username != null) && (password != "" || password != null)) {
+		if ((token != "" || token != null) && (password != "" || password != null)) {
 			return true;
 		}
 		return false;
@@ -45,10 +45,10 @@ public class UserSubcommand implements Runnable{
 	public void run() {
 		if(checkCredentials()) {
 			if(login) {
-				String sendLogin = "login " + username + " " + password;
+				String sendLogin = "user login " + token + " " + password;
 				parent.getClientService().sendString(sendLogin);
-			}else if(create && token != "" || token != null) {
-				String sendCreate = "create-user" + " " + token + " " + username + " " + password;
+			}else if(create && username != "" || username != null) {
+				String sendCreate = "user create-user" + " " + token + " " + username + " " + password;
 				parent.getClientService().sendString(sendCreate);
 			}else {
 		        System.out.println("Please select either --login or --create");

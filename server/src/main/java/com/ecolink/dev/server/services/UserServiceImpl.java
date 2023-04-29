@@ -20,12 +20,10 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public UserDTO login(String token, String password) throws Exception {
 		User user =  userDao.findByToken(token);
-		System.out.println(user);
 		
 		if(user.getPassword().equals(password)) {
 			return user.toDTO();
 		}
-		
 		
 		return null;
 	}
@@ -59,6 +57,8 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void updateUser(UserDTO userDTO) throws Exception {
+		System.out.println("ServiceImpl - " + userDTO);
+
 		userDao.update(userDTO.toUser());
 	}
 

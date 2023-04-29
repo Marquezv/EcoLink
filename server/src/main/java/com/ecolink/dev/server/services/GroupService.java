@@ -9,13 +9,11 @@ public class GroupService {
 	
 	private List<GroupDTO> groups = new ArrayList<>();
 	
-	public void createGroup(String groupName, Integer limit, String admin, String admin_id) {
-		GroupDTO group = new GroupDTO(groupName, limit, admin, admin_id);
-		groups.add(group);
+	public void createGroup(String groupName, Integer userLimit, String tkAdmin, String password) {
+		String id = null;
+		String token = null;
+		GroupDTO groupDTO = new GroupDTO(id,token, groupName, password, tkAdmin, userLimit);
+		groups.add(groupDTO);
 	}
-	
-//	public List<Map<String, String>> userGroup(String group_id) {
-		
-//	}
 	
 }

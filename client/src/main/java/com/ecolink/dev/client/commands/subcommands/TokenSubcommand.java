@@ -24,7 +24,7 @@ public class TokenSubcommand implements Runnable{
 	@Override
 	public void run() {
 		if(genToken) {
-			parent.getClientService().sendString("gtoken");
+			parent.getClientService().sendString("user gtoken");
 		}
 		
  	}
