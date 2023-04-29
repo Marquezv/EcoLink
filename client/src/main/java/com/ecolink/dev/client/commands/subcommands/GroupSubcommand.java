@@ -21,12 +21,32 @@ public class GroupSubcommand implements Runnable {
 	@Option(names = {"--create"}, description = "Create group")
 	private boolean create;
 	
+	@Option(names = {"-gn", "--group-name"}, description = "Group name")
+	private String groupName;
+	
 	@Option(names = {"--list"}, description = "List users in that group")
-	private boolean login;
+	private boolean list;
+	
+	@Option(names = {"--delete"}, description = "Delete group")
+	private boolean delete;
+	
+	private boolean checkCredentials() {
+		if ((groupName != "" || groupName != null)) {
+			return true;
+		}
+		return false;
+	}
 	
 	@Override
 	public void run() {
-		
+		if(create && checkCredentials()) {
+			String sendCreateGroup = "create-group " + groupName;
+			parent.getClientService().sendString(sendCreateGroup);
+		}
+		if(list) {
+			String sendListUsers = "list users";
+			parent.getClientService().sendString(sendListUsers);
+		}
 	}
 	
 }

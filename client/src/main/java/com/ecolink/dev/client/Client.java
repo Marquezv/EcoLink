@@ -11,6 +11,8 @@ import com.ecolink.dev.client.commands.CommandControl;
 import com.ecolink.dev.client.domain.User;
 
 import picocli.CommandLine;
+import picocli.CommandLine.Help.Ansi.Style;
+import picocli.CommandLine.Help.ColorScheme;
 
 
 public class Client {
@@ -20,11 +22,11 @@ public class Client {
 	private BufferedWriter bufferedWriter;
 	private User user;
 	
+	
 	public  Client(Socket socket) {
 		try {
 			this.socket = socket;
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
-
 			new CommandLine(new CommandControl(this.socket)).execute("-h");
 		} catch (Exception e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
@@ -34,11 +36,13 @@ public class Client {
 	public void sendMessage() {
 		try {
 			Scanner scanner = new Scanner(System.in);
+			
 			while(socket.isConnected()) {
 				System.out.print(">");
 				String messageToSend = scanner.nextLine();	
 				// Commands
-				new CommandLine(new CommandControl(this.socket)).execute(messageToSend.split(" "));
+				new CommandLine(new CommandControl(this.socket))
+					.execute(messageToSend.split(" "));
 			}
 			scanner.close();
 		} catch (Exception e) {

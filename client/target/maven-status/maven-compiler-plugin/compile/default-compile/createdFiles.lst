@@ -1,3 +1,2 @@
-com/ecolink/dev/client/commands/subcommands/SendMessageSubcommads.class
-com/ecolink/dev/client/services/ClientServiceImpl.class
 com/ecolink/dev/client/services/ClientService.class
+com/ecolink/dev/client/services/ClientServiceImpl.class
