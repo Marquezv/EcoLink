@@ -193,10 +193,14 @@ public class ClientHandler implements Runnable{
 			unicastMessage("Token: " + token + "\nUser: " + token + "\nPassword: " + token + "\nChange your data after login");
 		}
 		if(args[0].toString() == "list" || args[0].toString().equals("list")) {
-//			if(args[1].toString() == "online" || args[1].toString().equals("online")) 
+			if(args[1].toString() == "online" || args[1].toString().equals("online")) {
+				List<String> users = findAllUsersOnline();
+				unicastMessage(formatList(users));
+			}
+			if(args[1].toString() == "users" || args[1].toString().equals("users")) {
 				
-			List<String> users = findAllUsersOnline();
-			unicastMessage(formatList(users));
+			}
+			
 		}
 		
 		//Group Comands

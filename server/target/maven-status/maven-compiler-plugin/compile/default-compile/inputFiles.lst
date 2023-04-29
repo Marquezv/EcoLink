@@ -1,13 +1,14 @@
 /home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/Message.java
 /home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/entity/User.java
-/home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/Group.java
 /home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/repository/UserDao.java
+/home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/GroupDTO.java
 /home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/services/GroupService.java
 /home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/UserDTO.java
 /home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/ClientHandler.java
 /home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/utils/ConnectJDBC.java
 /home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/services/UserServiceImpl.java
 /home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/Sector.java
+/home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/entity/Group.java
 /home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/Server.java
 /home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/services/UserService.java
 /home/vm/EcoLink/server/src/main/java/com/ecolink/dev/server/services/ConnectionManager.java

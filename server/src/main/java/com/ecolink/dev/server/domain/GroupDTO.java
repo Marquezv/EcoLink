@@ -12,22 +12,20 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class Group implements Serializable {
+public class GroupDTO implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private String groupName;
 	private Integer limit;
-	private String admin;
-	private String admin_id;
-	private List<Map<String, String>> group = new ArrayList<>();
+	private String tkAdmin;
+	private List<Map<String, String>> users = new ArrayList<>();
 	
-	public Group(String groupName, Integer limit, String admin, String admin_id) {
+	public GroupDTO(String groupName, Integer limit, String admin, String tkAdmin) {
 		super();
 		this.groupName = groupName;
 		this.limit = limit;
-		this.admin = admin;
-		this.admin_id = admin_id;
+		this.tkAdmin = tkAdmin;
 	}
 	
 }
