@@ -28,8 +28,9 @@ public class UserDao implements JdbcDao<User> {
 				User user = mapRowToUser(resultSet);
 				users.add(user);
 			}
+			conn.close();
 		}
-
+		
 		return users;
 	}
 	
@@ -42,6 +43,7 @@ public class UserDao implements JdbcDao<User> {
 			try(ResultSet resultSet = statement.executeQuery()){
 				if(resultSet.next()) {
 					User user = mapRowToUser(resultSet);
+					connection.close();
 					return user;
 				}
 			}
@@ -60,6 +62,7 @@ public class UserDao implements JdbcDao<User> {
         	statement.setString(4, user.getPassword());
         	statement.executeUpdate();
         	System.out.println("SAVED");
+        	connection.close();
         }
         
 	}
@@ -73,6 +76,7 @@ public class UserDao implements JdbcDao<User> {
         	statement.setString(2, user.getPassword());
         	statement.setString(3, user.getToken());
         	statement.executeUpdate();
+        	connection.close();
         }
 	}
 
@@ -84,6 +88,7 @@ public class UserDao implements JdbcDao<User> {
             statement.setString(1, token);
             statement.executeUpdate();
         }
+    	connection.close();
 	}
 	
 	private User mapRowToUser(ResultSet resultSet) throws SQLException {

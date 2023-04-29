@@ -24,6 +24,13 @@ public class GroupSubcommand implements Runnable {
 	@Option(names = {"-gn", "--group-name"}, description = "Group name")
 	private String groupName;
 	
+	@Option(names = {"-p", "--password"}, description = "Password group")
+	private String password;
+	
+	@Option(names = {"-ul", "--user-limit"}, description = "User limit")
+	private String userLimit;
+
+
 	@Option(names = {"--list"}, description = "List users in that group")
 	private boolean list;
 	
@@ -40,7 +47,7 @@ public class GroupSubcommand implements Runnable {
 	@Override
 	public void run() {
 		if(create && checkCredentials()) {
-			String sendCreateGroup = "create-group " + groupName;
+			String sendCreateGroup = "group create-group " + groupName + " " + password + " " + userLimit;
 			parent.getClientService().sendString(sendCreateGroup);
 		}
 		if(list) {

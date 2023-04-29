@@ -28,6 +28,7 @@ public class GroupDao implements JdbcDao<Group> {
 				Group group = mapRowToUser(resultSet);
 				groups.add(group);
 			}
+			conn.close();
 		}
 
 		return groups;
@@ -42,6 +43,7 @@ public class GroupDao implements JdbcDao<Group> {
 			try(ResultSet resultSet = statement.executeQuery()){
 				if(resultSet.next()) {
 					Group group = mapRowToUser(resultSet);
+					connection.close();
 					return group;
 				}
 			}
@@ -61,9 +63,11 @@ public class GroupDao implements JdbcDao<Group> {
         	statement.setString(5, group.getTkAdmin());
         	statement.setInt(6, group.getUserLimit());
         	statement.executeUpdate();
+            connection.close();
         	System.out.println("SAVED");
         }
-        
+        connection.close();
+
 	}
 
 	@Override
@@ -76,7 +80,9 @@ public class GroupDao implements JdbcDao<Group> {
         	statement.setString(3, group.getToken());
         	statement.setInt(4, group.getUserLimit());
         	statement.executeUpdate();
+        	connection.close();
         }
+        connection.close();
 	}
 
 	@Override
@@ -86,7 +92,9 @@ public class GroupDao implements JdbcDao<Group> {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, token);
             statement.executeUpdate();
+            connection.close();
         }
+        connection.close();
 	}
 	
 	private Group mapRowToUser(ResultSet resultSet) throws SQLException {

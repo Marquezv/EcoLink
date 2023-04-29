@@ -28,5 +28,4 @@ public class Group {
 		this.userLimit = userLimit;
 	}
 	
-	
 }

@@ -5,12 +5,18 @@ import java.util.List;
 import com.ecolink.dev.server.domain.UserDTO;
 
 public interface UserService {
-	
-	 public UserDTO getUserByToken(String token) throws Exception;
-	 public List<UserDTO> getAllUsers() throws Exception;
-	 public void saveUser(UserDTO user) throws Exception;
-	 public void updateUser(UserDTO user) throws Exception;
-	 public void deleteUser(String token) throws Exception;
-	 public UserDTO login(String token, String password) throws Exception;
-	 public String genUserToken();
+
+	UserDTO getUserByToken(String token) throws Exception;
+
+	List<UserDTO> getAllUsers() throws Exception;
+
+	void saveUser(UserDTO user) throws Exception;
+
+	void updateUser(UserDTO user) throws Exception;
+
+	void deleteUser(String token) throws Exception;
+
+	UserDTO login(String token, String password) throws Exception;
+
+	String genUserToken();
 }
