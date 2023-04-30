@@ -1,5 +1,9 @@
 package com.ecolink.dev.server.services.listener;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.ecolink.dev.server.ClientHandler;
 import com.ecolink.dev.server.domain.UserDTO;
 import com.ecolink.dev.server.repository.UserDao;
@@ -20,7 +24,7 @@ public class UserCommand implements ListenerFunction{
 		super();
 		this.clientHandler = clientHandler;
 		this.messageService = new MessageServiceImpl(clientHandler);
-		this.userService = new UserServiceImpl(new UserDao());
+		this.userService = new UserServiceImpl(new UserDao(), clientHandler);
 	}
 
 	@Override
@@ -37,10 +41,13 @@ public class UserCommand implements ListenerFunction{
 		if(args[1].toString() == "gtoken" || args[1].toString().equals("gtoken")) {
 			gtoken(args);
 		}
+		if(args[1].toString() == "list" || args[1].toString().equals("list")) {
+			list(args);
+		}
 		
 	}
 	
-	public void login(String...args) {
+	private void login(String...args) {
 		String token = args[2].toString();
 		String password = args[3].toString();
 		try {
@@ -55,7 +62,7 @@ public class UserCommand implements ListenerFunction{
 	}
 	
 	
-	public void create(String...args) {
+	private void create(String...args) {
 		String token = args[2].toString();
 		String username = args[3].toString();
 		String password = args[4].toString();
@@ -69,7 +76,7 @@ public class UserCommand implements ListenerFunction{
 		}
 	}
 	
-	public void update(String...args) {
+	private void update(String...args) {
 		UserDTO userDTO = clientHandler.getUserDTO();
 		if( userDTO != null) {
 			userDTO.setName(args[2]);
@@ -88,7 +95,7 @@ public class UserCommand implements ListenerFunction{
 		}
 	}
 	
-	public void gtoken(String...args) {
+	private void gtoken(String...args) {
 		try {
 			String token = userService.genUserToken();
 			UserDTO user = new UserDTO(token, token, token);
@@ -98,5 +105,31 @@ public class UserCommand implements ListenerFunction{
 			messageService.unicastMessage("[ERROR] Generate Token user");
 		}
 	}
-
+	
+	private void list(String...args) {
+		
+			try {
+				if(args[2].toString() == "online" || args[2].toString().equals("online")) {
+					messageService.unicastMessage(formatList(userService.getAllUsersOnline()));
+				}
+				if(args[2].toString() == "users" || args[2].toString().equals("users")) {
+					List<UserDTO> userList = userService.getAllUsers();
+					messageService.unicastMessage(formatList(userList));
+				}			
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+	}
+	
+	private String formatList(List<UserDTO> list) {
+		List<String> listUserFormat = new ArrayList<String>();
+		for(UserDTO userDTO : list) {
+			listUserFormat.add("token:" + userDTO.getToken() + "|user:" + userDTO.getName() );
+		}
+		return listUserFormat.stream().map(item -> "\n* " + item)
+				.collect(Collectors.joining("\n"));
+	}
+	
 }

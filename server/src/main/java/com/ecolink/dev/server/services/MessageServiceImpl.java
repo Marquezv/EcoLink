@@ -3,9 +3,9 @@ package com.ecolink.dev.server.services;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.List;
 
 import com.ecolink.dev.server.ClientHandler;
+import com.ecolink.dev.server.domain.UserDTO;
 
 public class MessageServiceImpl implements MessageService{
 	
@@ -32,20 +32,38 @@ public class MessageServiceImpl implements MessageService{
 
 	@Override
 	public void sendToTokens(String messageToSend, String tkUser) {
-		// TODO Auto-generated method stub
+		System.out.println(clientHandler.getClientHandlers().size());
+		for(ClientHandler clients : clientHandler.getClientHandlers()) {
+			System.err.println(clients.getUserDTO().toString());
+			UserDTO userDTO = clients.getUserDTO();
+			try {
+				if(userDTO.getToken().equals(tkUser)) {
+					clients.getBufferedWriter().write("["+ clientHandler.getUserDTO().getToken() + "|" + clientHandler.getUserDTO().getName() +"] - " + messageToSend);
+					clients.getBufferedWriter().newLine();
+					clients.getBufferedWriter().flush();
+				}
+			}catch (Exception e) {
+				unicastMessage("User not loged");
+			}
+			
+		}
 		
 	}
 
 	@Override
-	public void broadcastMessage(String messageToSend, List<ClientHandler> group) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void broadcastMessage(String messageToSend) {
+		for (ClientHandler clients: clientHandler.getClientHandlers()) {
 
-	@Override
-	public void anyMessage(String messageToSend, List<String> group) {
-		// TODO Auto-generated method stub
-		
+			try {
+				if(!clients.getUserDTO().getToken().equals(clientHandler.getUserDTO().getToken())) {
+					clients.getBufferedWriter().write("[SERVER]: " + messageToSend);
+					clients.getBufferedWriter().newLine();
+					clients.getBufferedWriter().flush();
+				}
+			} catch (IOException e) {
+				unicastMessage("Client not logged");
+			}
+		}		
 	}
 
 	@Override

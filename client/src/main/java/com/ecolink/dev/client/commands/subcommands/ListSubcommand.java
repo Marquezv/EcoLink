@@ -20,14 +20,21 @@ public class ListSubcommand implements Runnable {
 	private CommandLine.Model.CommandSpec spec;
 	
 	
-	@Option(names = {"--online"}, description = "Online")
+	@Option(names = {"-o","--online"}, description = "Online")
 	private boolean login;
+	
+	@Option(names = {"-u","--users"}, description = "Online")
+	private boolean user;
 	
 	@Option(names = {"--group"}, description = "Group")
 	private boolean group;
 	
 	@Override
 	public void run() {
+		if(user) {
+			String sendListUser = "list users";
+			parent.getClientService().sendString(sendListUser);
+		}
 		if(login) {
 			String sendListUserOnline = "list online";
 			parent.getClientService().sendString(sendListUserOnline);

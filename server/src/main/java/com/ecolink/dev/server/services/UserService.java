@@ -9,13 +9,15 @@ public interface UserService {
 	UserDTO getUserByToken(String token) throws Exception;
 
 	List<UserDTO> getAllUsers() throws Exception;
-
+	
+	List<UserDTO> getAllUsersOnline() throws Exception;
+	
 	void saveUser(UserDTO user) throws Exception;
 
 	void updateUser(UserDTO user) throws Exception;
 
 	void deleteUser(String token) throws Exception;
-
+	
 	UserDTO login(String token, String password) throws Exception;
 
 	String genUserToken();

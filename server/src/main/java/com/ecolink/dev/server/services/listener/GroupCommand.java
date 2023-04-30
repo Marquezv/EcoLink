@@ -33,7 +33,7 @@ public class GroupCommand implements ListenerFunction {
 		}
 	}
 
-	public void create(String...args)  {
+	private void create(String...args)  {
 		UserDTO userDTO = clientHandler.getUserDTO();
 		System.out.println(userDTO);
 		if( userDTO != null) {

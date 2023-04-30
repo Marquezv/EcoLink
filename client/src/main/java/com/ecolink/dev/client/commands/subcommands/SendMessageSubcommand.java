@@ -36,7 +36,7 @@ public class SendMessageSubcommand implements Runnable{
 		System.out.println("Global: " + global);
 		System.out.println("tkUser: " + tkUser);
 			if(message != null) {
-				String msg = "send-string " + global + " "+ tkUser + " "+ message;
+				String msg = "send string " + global + " "+ tkUser + " "+ message;
 				System.out.println(msg);
 				parent.getClientService().sendString(msg);
 			}
