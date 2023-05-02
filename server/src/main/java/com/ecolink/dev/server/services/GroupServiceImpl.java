@@ -20,25 +20,28 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	@Override
-	public void addUser(GroupDTO groupDTO, String tkUser) throws SQLException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void join(GroupDTO groupDTO, String password) throws SQLException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void exit(GroupDTO groupDTO) throws SQLException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public String genGroupToken() {
 		return UUID.randomUUID().toString().substring(0, 5);
+	}
+
+	@Override
+	public void deleteGroup(GroupDTO groupDTO) throws SQLException {
+		groupDao.deleteByToken(groupDTO.getToken());
+	}
+
+	@Override
+	public GroupDTO findGroup(String tkGroup) {
+		try {
+			return groupDao.findByToken(tkGroup).toDTO();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public void updateGroup(GroupDTO groupDTO, String password) throws SQLException {
+		groupDao.update(groupDTO.toGroup());
 	}
 
 }

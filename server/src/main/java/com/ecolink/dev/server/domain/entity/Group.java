@@ -2,6 +2,8 @@ package com.ecolink.dev.server.domain.entity;
 
 import java.util.UUID;
 
+import com.ecolink.dev.server.domain.GroupDTO;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,4 +30,12 @@ public class Group {
 		this.userLimit = userLimit;
 	}
 	
+	public GroupDTO toDTO() {
+		return new GroupDTO(this.id,
+				this.name,
+				this.password,
+				this.tkAdmin,
+				this.userLimit
+		);
+	}
 }

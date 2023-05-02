@@ -29,8 +29,16 @@ public class GroupSubcommand implements Runnable {
 	
 	@Option(names = {"-ul", "--user-limit"}, description = "User limit")
 	private String userLimit;
-
-
+	
+	@Option(names = {"add"}, description = "List users in that group")
+	private boolean add;
+	
+	@Option(names = {"-tk", "--token"}, description = "Token User")
+	private String user;
+	
+	@Option(names = {"-tkGroup", "--tokenGroup"}, description = "Token Group")
+	private String tkGroup;
+	
 	@Option(names = {"--list"}, description = "List users in that group")
 	private boolean list;
 	
@@ -50,9 +58,14 @@ public class GroupSubcommand implements Runnable {
 			String sendCreateGroup = "group create-group " + groupName + " " + password + " " + userLimit;
 			parent.getClientService().sendString(sendCreateGroup);
 		}
-		if(list) {
-			String sendListUsers = "list users";
+		if(list && tkGroup != null) {
+			String sendListUsers = "group list " + tkGroup;
 			parent.getClientService().sendString(sendListUsers);
+		}
+		if(add && tkGroup != null && user != null) {
+			String sendAddUser = "group add " + tkGroup + " " + user;
+			parent.getClientService().sendString(sendAddUser);
+
 		}
 	}
 	
