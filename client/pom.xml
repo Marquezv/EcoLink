@@ -37,11 +37,6 @@
 			<artifactId>picocli</artifactId>
 			<version>4.7.2</version>
 		</dependency>
-		<dependency>
-			<groupId>com.gitlab.klamonte</groupId>
-			<artifactId>jexer</artifactId>
-			<version>1.6.0</version>
-		</dependency>
 
 	</dependencies>
 

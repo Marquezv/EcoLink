@@ -45,6 +45,12 @@ public class GroupSubcommand implements Runnable {
 	@Option(names = {"--delete"}, description = "Delete group")
 	private boolean delete;
 	
+	@Option(names = {"open"}, description = "Join in conversation")
+	private boolean open;
+	
+	@Option(names = {"join"}, description = "Join in conversation")
+	private boolean join;
+	
 	private boolean checkCredentials() {
 		if ((groupName != "" || groupName != null)) {
 			return true;
@@ -67,6 +73,15 @@ public class GroupSubcommand implements Runnable {
 			parent.getClientService().sendString(sendAddUser);
 
 		}
+		if(join && tkGroup != null) {
+			String sendJoinGroup = "group join " + tkGroup;
+			parent.getClientService().sendString(sendJoinGroup);
+		}
+		if(open && tkGroup != null) {
+			String sendOpenGroup = "group open " + tkGroup;
+			parent.getClientService().sendString(sendOpenGroup);
+		}
+		
 	}
 	
 }

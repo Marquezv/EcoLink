@@ -40,6 +40,9 @@ public class GroupCommand implements ListenerFunction {
 		if (args[1].toString() == "add" || args[1].toString().equals("add")) {
 			add(args);
 		}
+		if (args[1].toString() == "open" || args[1].toString().equals("join")) {
+			open(args);
+		}
 	}
 
 	private void create(String...args)  {
@@ -75,6 +78,18 @@ public class GroupCommand implements ListenerFunction {
 			GroupDTO groupDTO = groupService.findGroup(tkGroup);
 			allowedGroupUserService.addUser(groupDTO, tkUser);
 		} catch (SQLException e) {
+			messageService.unicastMessage("GROUP NOT FOUND");
+			e.printStackTrace();
+		}
+	}
+	
+	private void open(String...args) {
+		String tkGroup = args[2].toString(); 
+		
+		try {
+			GroupDTO groupDTO = groupService.findGroup(tkGroup);
+			messageService.unicastMessage("-------GROUP: " + groupDTO.getName() + " | " + groupDTO.getToken() + " -------");
+		} catch (Exception e) {
 			messageService.unicastMessage("GROUP NOT FOUND");
 			e.printStackTrace();
 		}

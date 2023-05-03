@@ -8,6 +8,7 @@ import com.ecolink.dev.server.services.listener.UserCommand;
 
 public class ListenerFactory {
 	
+	public static Integer mode;
 	
 	public ListenerFunction createStringFunction(ClientHandler clientHandler, String...args) {
 		if(args[0].toString() == "user" || args[0].toString().equals("user")) {

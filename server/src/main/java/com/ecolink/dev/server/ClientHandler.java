@@ -74,8 +74,6 @@ public class ClientHandler implements Runnable{
 
 				System.out.println(messageFromClient);
 				
-				System.out.println(clientHandlers.size());
-				
 				ListenerFactory factory = new ListenerFactory();
 				ListenerFunction function = factory.createStringFunction(this, msgArray);
 				function.apply(msgArray);

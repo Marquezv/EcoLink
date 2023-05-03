@@ -8,7 +8,8 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import com.ecolink.dev.client.commands.CommandControl;
-import com.ecolink.dev.client.domain.User;
+import com.ecolink.dev.client.services.ClientService;
+import com.ecolink.dev.client.services.ClientServiceImpl;
 
 import picocli.CommandLine;
 
@@ -18,14 +19,15 @@ public class Client {
 	private Socket socket;
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
-	private User user;
-	
+	private ClientService clientService;
 	
 	public  Client(Socket socket) {
 		try {
 			this.socket = socket;
-			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
+			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			clientService = new ClientServiceImpl(socket);
 			new CommandLine(new CommandControl(this.socket)).execute("-h");
+			
 		} catch (Exception e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
 		}
@@ -39,8 +41,10 @@ public class Client {
 				System.out.print(">");
 				String messageToSend = scanner.nextLine();	
 				// Commands
+				// if [0] = > request last command (message to group or user)
 				new CommandLine(new CommandControl(this.socket))
-					.execute(messageToSend.split(" "));
+				.execute(messageToSend.split(" "));
+				
 			}
 			scanner.close();
 		} catch (Exception e) {
@@ -49,24 +53,21 @@ public class Client {
 	}
 	
 	public void listenForMessage() {
-		
-		new Thread(new Runnable(){
-			@Override
-			public void run() {
+	    new Thread(() -> {
+	        String msgFromGroupChat;
+	        while (socket.isConnected()) {
+	            try {
+	                msgFromGroupChat = bufferedReader.readLine();
 
-				String msgFromGroupChat;
-				while(socket.isConnected()) {
-					try {
-						msgFromGroupChat = bufferedReader.readLine();
-						
-						if(msgFromGroupChat != null) System.out.println(msgFromGroupChat);
-						
-					}catch (IOException e) {
-						closeEverything(socket, bufferedReader, bufferedWriter);
-					}
-				}
-			}
-		}).start();
+	                if (msgFromGroupChat != null) {
+	                        System.out.println(msgFromGroupChat);
+	                    }
+
+	            } catch (IOException e) {
+	                closeEverything(socket, bufferedReader, bufferedWriter);
+	            }
+	        }
+	    }).start();
 	}
 	
 	
@@ -98,6 +99,8 @@ public class Client {
 		
 	}
 	
+	
+
 }
 
 
