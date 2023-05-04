@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import com.ecolink.dev.server.domain.UserDTO;
+import com.ecolink.dev.server.enums.State;
 import com.ecolink.dev.server.services.MessageService;
 import com.ecolink.dev.server.services.MessageServiceImpl;
 import com.ecolink.dev.server.utils.ListenerFactory;
@@ -22,7 +23,8 @@ public class ClientHandler implements Runnable{
 	private BufferedWriter bufferedWriter;
 	private UserDTO userDTO;
 	private MessageService messageService;
-
+	private State state = State.NONE;
+	
     // Filas de mensagens apos logar ler as mensagens na fila
 	public ClientHandler(Socket socket) {
 		try {
@@ -36,6 +38,14 @@ public class ClientHandler implements Runnable{
         }
 	}
 	
+	public State getState() {
+		return state;
+	}
+
+	public void setState(State state) {
+		this.state = state;
+	}
+
 	public ArrayList<ClientHandler> getClientHandlers() {
 		return clientHandlers;
 	}
@@ -73,7 +83,7 @@ public class ClientHandler implements Runnable{
 				String[] msgArray = messageFromClient.split("\\s");
 
 				System.out.println(messageFromClient);
-				
+				System.out.println(state);
 				ListenerFactory factory = new ListenerFactory();
 				ListenerFunction function = factory.createStringFunction(this, msgArray);
 				function.apply(msgArray);

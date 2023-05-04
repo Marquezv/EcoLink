@@ -37,11 +37,12 @@ public class Client {
 		try {
 			Scanner scanner = new Scanner(System.in);
 			
+			//Console
+			
+			
 			while(socket.isConnected()) {
-				System.out.print(">");
 				String messageToSend = scanner.nextLine();	
 				// Commands
-				// if [0] = > request last command (message to group or user)
 				new CommandLine(new CommandControl(this.socket))
 				.execute(messageToSend.split(" "));
 				

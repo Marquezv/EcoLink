@@ -1,6 +1,7 @@
 package com.ecolink.dev.client.commands.subcommands;
 
 import com.ecolink.dev.client.commands.CommandControl;
+import com.ecolink.dev.client.domain.Message;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -11,6 +12,7 @@ import picocli.CommandLine.Spec;
 @Command(name = "send-message",
 	mixinStandardHelpOptions = true)
 public class SendMessageSubcommand implements Runnable{
+	
 	
 	@ParentCommand
 	private CommandControl parent;
@@ -39,6 +41,7 @@ public class SendMessageSubcommand implements Runnable{
 				String msg = "send string " + global + " "+ tkUser + " "+ message;
 				System.out.println(msg);
 				parent.getClientService().sendString(msg);
+				Message messageObj = new Message(message, tkGroup, tkUser);
 			}
 	}
 

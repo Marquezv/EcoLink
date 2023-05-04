@@ -13,11 +13,17 @@ public class Message implements Serializable{
 
 private static final long serialVersionUID = 1L;
 	
-	private String message_content;
-
+	private String message;
 	
-	public Message(String message_content) {
-		this.message_content = message_content;
+	private String tkUser;
+	private String tkGroup;
+	
+	public Message(String message, String tkUser, String tkGroup) {
+		super();
+		this.message = message;
+		this.tkUser = tkUser;
+		this.tkGroup = tkGroup;
 	}
-
+	
+	
 }
