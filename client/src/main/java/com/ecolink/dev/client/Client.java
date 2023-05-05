@@ -7,8 +7,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.Scanner;
 
-import com.ecolink.dev.client.chat.CommandModeState;
-import com.ecolink.dev.client.chat.ConsoleMode;
+import com.ecolink.dev.client.chat.Chat;
 import com.ecolink.dev.client.commands.CommandControl;
 import com.ecolink.dev.client.services.ClientService;
 import com.ecolink.dev.client.services.ClientServiceImpl;
@@ -22,7 +21,7 @@ public class Client {
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
 	private ClientService clientService;
-	private ConsoleMode consoleMode;
+	private Chat chat;
 	
 	public  Client(Socket socket) {
 		try {
@@ -30,8 +29,7 @@ public class Client {
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			clientService = new ClientServiceImpl(socket);
 			new CommandLine(new CommandControl(this.socket)).execute("-h");
-			consoleMode = new ConsoleMode();
-			consoleMode.setState(new CommandModeState());
+			this.chat = new Chat();
 		} catch (Exception e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
 		}
@@ -43,8 +41,13 @@ public class Client {
 			
 			//Console
 			while(socket.isConnected()) {
-				String messageToSend = scanner.nextLine();	
-				consoleMode.processInput(messageToSend, socket);
+				String messageToSend = scanner.nextLine();
+				String[] args = messageToSend.split(" ");
+				CommandControl commandControl = new CommandControl(socket);
+				new CommandLine(commandControl)
+				.execute(args);	
+				
+				 chat.onCommand();
 			}
 			scanner.close();
 		} catch (Exception e) {
