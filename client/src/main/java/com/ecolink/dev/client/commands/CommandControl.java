@@ -31,7 +31,7 @@ import picocli.CommandLine.Spec;
 			ConfigSubcommand.class,
 			ListSubcommand.class,
 			GroupSubcommand.class})
-public class CommandControl{
+public class CommandControl {
 	@Spec CommandSpec spec;
 	
 	private Socket socket;
@@ -46,8 +46,7 @@ public class CommandControl{
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 }
 
 
