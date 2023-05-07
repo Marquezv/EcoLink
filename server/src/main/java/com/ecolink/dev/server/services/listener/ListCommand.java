@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.ecolink.dev.server.ClientHandler;
+import com.ecolink.dev.server.client.ClientHandler;
 import com.ecolink.dev.server.domain.UserDTO;
 import com.ecolink.dev.server.repository.UserDao;
 import com.ecolink.dev.server.services.MessageService;

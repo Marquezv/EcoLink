@@ -1,5 +1,7 @@
 package com.ecolink.dev.client.chat;
 
+import java.net.Socket;
+
 public class Chat {
 	
 	private ChatState state = new ChatCommand(this);
@@ -33,8 +35,8 @@ public class Chat {
 		this.state.onGlobal();
 	}
 	
-	public void chat() {
-		this.state.chat();
+	public void processInput(Socket socket, String...args) {
+		this.state.processInput(socket, args);
 	}
 	
 }

@@ -4,7 +4,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.Socket;
 
-import com.ecolink.dev.server.ClientHandler;
+import com.ecolink.dev.server.client.ClientHandler;
 import com.ecolink.dev.server.domain.UserDTO;
 
 public class MessageServiceImpl implements MessageService{

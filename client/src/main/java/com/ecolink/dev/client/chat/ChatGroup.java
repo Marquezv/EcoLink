@@ -1,5 +1,7 @@
 package com.ecolink.dev.client.chat;
 
+import java.net.Socket;
+
 public class ChatGroup implements ChatState {
 	
 	private String name = "ChatGroup";
@@ -36,9 +38,6 @@ public class ChatGroup implements ChatState {
 	}
 
 	@Override
-	public void chat() {
-		// TODO Auto-generated method stub
-		
+	public void processInput(Socket socket, String[] args) {
 	}
-
 }

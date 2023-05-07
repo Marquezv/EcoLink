@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.ecolink.dev.server.ClientHandler;
+import com.ecolink.dev.server.client.ClientHandler;
 import com.ecolink.dev.server.domain.UserDTO;
 import com.ecolink.dev.server.repository.UserDao;
 import com.ecolink.dev.server.services.MessageService;
@@ -35,7 +35,7 @@ public class UserCommand implements ListenerFunction{
 		if(args[1].toString() == "create-user" || args[1].toString().equals("create-user")) {
 			create(args);
 		}
-		if(args[1].toString() == "update-user" || args[1].toString().equals("update-user")) {
+		if(args[1].toString() == "update-user" || args[1].toString().equals("updates-user")) {
 			update(args);
 		}
 		if(args[1].toString() == "gtoken" || args[1].toString().equals("gtoken")) {

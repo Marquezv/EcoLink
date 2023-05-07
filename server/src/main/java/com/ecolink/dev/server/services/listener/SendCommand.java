@@ -1,6 +1,6 @@
 package com.ecolink.dev.server.services.listener;
 
-import com.ecolink.dev.server.ClientHandler;
+import com.ecolink.dev.server.client.ClientHandler;
 import com.ecolink.dev.server.services.MessageService;
 import com.ecolink.dev.server.services.MessageServiceImpl;
 import com.ecolink.dev.server.utils.ListenerFunction;

@@ -1,5 +1,11 @@
 package com.ecolink.dev.client.chat;
 
+import java.net.Socket;
+
+import com.ecolink.dev.client.commands.CommandControl;
+
+import picocli.CommandLine;
+
 public class ChatCommand implements ChatState {
 	
 	private String name = "ChatCommand";
@@ -32,14 +38,14 @@ public class ChatCommand implements ChatState {
 
 	@Override
 	public void onGlobal() {
-		// TODO Auto-generated method stub
-		
+		this.chat.setState(new ChatGlobal(this.chat));
 	}
 
 	@Override
-	public void chat() {
-		// TODO Auto-generated method stub
-		
+	public void processInput(Socket socket, String[] args) {
+		CommandControl commandControl = new CommandControl(socket);
+		new CommandLine(commandControl)
+		.execute(args);			
 	}
 
 }

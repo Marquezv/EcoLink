@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.ecolink.dev.server.ClientHandler;
+import com.ecolink.dev.server.client.ClientHandler;
 import com.ecolink.dev.server.domain.UserDTO;
 import com.ecolink.dev.server.domain.entity.User;
 import com.ecolink.dev.server.repository.UserDao;

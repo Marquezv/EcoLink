@@ -2,10 +2,9 @@ package com.ecolink.dev.server.services.listener;
 
 import java.sql.SQLException;
 
-import com.ecolink.dev.server.ClientHandler;
+import com.ecolink.dev.server.client.ClientHandler;
 import com.ecolink.dev.server.domain.GroupDTO;
 import com.ecolink.dev.server.domain.UserDTO;
-import com.ecolink.dev.server.enums.State;
 import com.ecolink.dev.server.repository.AllowedGroupUserDao;
 import com.ecolink.dev.server.repository.GroupDao;
 import com.ecolink.dev.server.services.AllowedGroupUserService;
@@ -90,7 +89,6 @@ public class GroupCommand implements ListenerFunction {
 		try {
 			GroupDTO groupDTO = groupService.findGroup(tkGroup);
 			messageService.unicastMessage("-------GROUP: " + groupDTO.getName() + " | " + groupDTO.getToken() + " -------");
-			clientHandler.setState(State.GROUP);
 		} catch (Exception e) {
 			messageService.unicastMessage("GROUP NOT FOUND");
 			e.printStackTrace();

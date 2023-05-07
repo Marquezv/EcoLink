@@ -1,5 +1,11 @@
 package com.ecolink.dev.client.chat;
 
+import java.net.Socket;
+
+import com.ecolink.dev.client.commands.subcommands.GroupSubcommand;
+
+import picocli.CommandLine;
+
 public class ChatUser implements ChatState {
 	
 	private String name = "ChatUser";
@@ -36,8 +42,18 @@ public class ChatUser implements ChatState {
 	}
 
 	@Override
-	public void chat() {
-		// TODO Auto-generated method stub
+	public void processInput(Socket socket, String[] args) {
+		if (args.length > 0 && args[0].equals("/g")) {
+            try {
+                GroupSubcommand groupCommand = new GroupSubcommand();
+                CommandLine commandLine = new CommandLine(groupCommand);
+                commandLine.execute(args);
+            } catch (Exception e) {
+                System.out.println("Failed to execute group command: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Invalid command for group mode.");
+        }
 		
 	}
 

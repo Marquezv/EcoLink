@@ -1,7 +1,6 @@
 package com.ecolink.dev.client.commands.subcommands;
 
 import com.ecolink.dev.client.commands.CommandControl;
-import com.ecolink.dev.client.domain.Message;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -81,7 +80,6 @@ public class GroupSubcommand implements Runnable {
 		if(open && tkGroup != null) {
 			String sendOpenGroup = "group open " + tkGroup;
 			parent.getClientService().sendString(sendOpenGroup);
-			Message msg = new Message(sendOpenGroup, sendOpenGroup, sendOpenGroup);
 		}
 			
 	}

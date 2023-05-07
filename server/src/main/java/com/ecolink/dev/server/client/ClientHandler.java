@@ -1,4 +1,4 @@
-package com.ecolink.dev.server;
+package com.ecolink.dev.server.client;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,7 +9,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import com.ecolink.dev.server.domain.UserDTO;
-import com.ecolink.dev.server.enums.State;
 import com.ecolink.dev.server.services.MessageService;
 import com.ecolink.dev.server.services.MessageServiceImpl;
 import com.ecolink.dev.server.utils.ListenerFactory;
@@ -23,7 +22,6 @@ public class ClientHandler implements Runnable{
 	private BufferedWriter bufferedWriter;
 	private UserDTO userDTO;
 	private MessageService messageService;
-	private State state = State.NONE;
 	
     // Filas de mensagens apos logar ler as mensagens na fila
 	public ClientHandler(Socket socket) {
@@ -36,14 +34,6 @@ public class ClientHandler implements Runnable{
 		}catch (Exception e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
-	}
-	
-	public State getState() {
-		return state;
-	}
-
-	public void setState(State state) {
-		this.state = state;
 	}
 
 	public ArrayList<ClientHandler> getClientHandlers() {
@@ -81,9 +71,7 @@ public class ClientHandler implements Runnable{
 			while(socket.isConnected()) {
 				messageFromClient = bufferedReader.readLine();
 				String[] msgArray = messageFromClient.split("\\s");
-
 				System.out.println(messageFromClient);
-				System.out.println(state);
 				ListenerFactory factory = new ListenerFactory();
 				ListenerFunction function = factory.createStringFunction(this, msgArray);
 				function.apply(msgArray);

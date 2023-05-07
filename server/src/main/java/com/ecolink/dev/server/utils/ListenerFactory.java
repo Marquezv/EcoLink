@@ -1,6 +1,6 @@
 package com.ecolink.dev.server.utils;
 
-import com.ecolink.dev.server.ClientHandler;
+import com.ecolink.dev.server.client.ClientHandler;
 import com.ecolink.dev.server.services.listener.GroupCommand;
 import com.ecolink.dev.server.services.listener.ListCommand;
 import com.ecolink.dev.server.services.listener.SendCommand;

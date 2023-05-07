@@ -9,8 +9,6 @@ import java.util.Scanner;
 
 import com.ecolink.dev.client.chat.Chat;
 import com.ecolink.dev.client.commands.CommandControl;
-import com.ecolink.dev.client.services.ClientService;
-import com.ecolink.dev.client.services.ClientServiceImpl;
 
 import picocli.CommandLine;
 
@@ -20,15 +18,14 @@ public class Client {
 	private Socket socket;
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
-	private ClientService clientService;
 	private Chat chat;
 	
 	public  Client(Socket socket) {
 		try {
 			this.socket = socket;
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			clientService = new ClientServiceImpl(socket);
 			new CommandLine(new CommandControl(this.socket)).execute("-h");
+//			chat.onCommand();
 			this.chat = new Chat();
 		} catch (Exception e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
@@ -38,16 +35,26 @@ public class Client {
 	public void sendMessage() {
 		try {
 			Scanner scanner = new Scanner(System.in);
-			
 			//Console
 			while(socket.isConnected()) {
 				String messageToSend = scanner.nextLine();
-				String[] args = messageToSend.split(" ");
-				CommandControl commandControl = new CommandControl(socket);
-				new CommandLine(commandControl)
-				.execute(args);	
-				
-				 chat.onCommand();
+				if (messageToSend != null) {
+				    String[] args = messageToSend.split(" ");
+				    if (args[0].equals("/g")) {
+				        chat.onGroup();
+				    }
+				    if (args[0].equals("/gl")) {
+				        chat.onGlobal();
+				    }
+				    if (args[0].equals("/u")) {
+				        chat.onUser();
+				    }
+				    if (args[0].equals("/cmd")) {
+				        chat.onCommand();
+				    }
+				    chat.processInput(socket, args);
+
+				}
 			}
 			scanner.close();
 		} catch (Exception e) {
