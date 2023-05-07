@@ -21,7 +21,7 @@ public class ListSubcommand implements Runnable {
 	
 	
 	@Option(names = {"-o","--online"}, description = "Online")
-	private boolean login;
+	private boolean online;
 	
 	@Option(names = {"-u","--users"}, description = "Online")
 	private boolean user;
@@ -35,9 +35,13 @@ public class ListSubcommand implements Runnable {
 			String sendListUser = "list users";
 			parent.getClientService().sendString(sendListUser);
 		}
-		if(login) {
+		if(online) {
 			String sendListUserOnline = "list online";
 			parent.getClientService().sendString(sendListUserOnline);
+		}
+		if(group) {
+			String sendListGroup = "list group";
+			parent.getClientService().sendString(sendListGroup);
 		}
 	}
 	

@@ -71,7 +71,6 @@ public class GroupSubcommand implements Runnable {
 		if(add && tkGroup != null && user != null) {
 			String sendAddUser = "group add " + tkGroup + " " + user;
 			parent.getClientService().sendString(sendAddUser);
-
 		}
 		if(join && tkGroup != null) {
 			String sendJoinGroup = "group join " + tkGroup;

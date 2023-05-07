@@ -1,11 +1,17 @@
 package com.ecolink.dev.client.chat;
 
+import java.io.IOException;
 import java.net.Socket;
+
+import com.ecolink.dev.client.services.ClientService;
+import com.ecolink.dev.client.services.ClientServiceImpl;
 
 public class ChatGlobal implements ChatState {
 	
 	private String name = "ChatGlobal";
 	private Chat chat;
+	private ClientService clientService;
+	
 	
 	public ChatGlobal(Chat chat) {
 		super();
@@ -34,13 +40,17 @@ public class ChatGlobal implements ChatState {
 
 	@Override
 	public void onGlobal() {
-		System.out.println("[MODE - GROUP]");		
+		System.out.println("[MODE - GLOBAL]");		
 	}
 
 	@Override
 	public void processInput(Socket socket, String[] args) {
-		System.out.println(args.toString());
-		
+		try {
+			clientService = new ClientServiceImpl(socket);
+			clientService.sendString("send string true " + args.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

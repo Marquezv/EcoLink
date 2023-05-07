@@ -32,11 +32,9 @@ public class MessageServiceImpl implements MessageService{
 
 	@Override
 	public void sendToTokens(String messageToSend, String tkUser) {
-		System.out.println(clientHandler.getClientHandlers().size());
 		for(ClientHandler clients : clientHandler.getClientHandlers()) {
-			System.err.println(clients.getUserDTO().toString());
-			UserDTO userDTO = clients.getUserDTO();
 			try {
+				UserDTO userDTO = clients.getUserDTO();
 				if(userDTO.getToken().equals(tkUser)) {
 					clients.getBufferedWriter().write("["+ clientHandler.getUserDTO().getToken() + "|" + clientHandler.getUserDTO().getName() +"] - " + messageToSend);
 					clients.getBufferedWriter().newLine();
@@ -55,7 +53,8 @@ public class MessageServiceImpl implements MessageService{
 		for (ClientHandler clients: clientHandler.getClientHandlers()) {
 
 			try {
-				if(!clients.getUserDTO().getToken().equals(clientHandler.getUserDTO().getToken())) {
+				String userToken = clientHandler.getUserDTO().getToken();
+				if(!clients.getUserDTO().getToken().equals(userToken)) {
 					clients.getBufferedWriter().write("[SERVER]: " + messageToSend);
 					clients.getBufferedWriter().newLine();
 					clients.getBufferedWriter().flush();

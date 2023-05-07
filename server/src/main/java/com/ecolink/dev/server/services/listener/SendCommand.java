@@ -31,7 +31,8 @@ public class SendCommand implements ListenerFunction{
 		
 		if(global == "true" || global.equals("true")) {
 			messageService.broadcastMessage(message);
-		} else {
+		}
+		else {
 			messageService.sendToTokens(message, tkUser);
 		}
 	}

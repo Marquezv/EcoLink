@@ -40,10 +40,7 @@ public class Client {
 				String messageToSend = scanner.nextLine();
 				if (messageToSend != null) {
 				    String[] args = messageToSend.split(" ");
-				    if (args[0].equals("/g")) {
-				        chat.onGroup();
-				    }
-				    if (args[0].equals("/gl")) {
+				    if (args[0].equals("/all")) {
 				        chat.onGlobal();
 				    }
 				    if (args[0].equals("/u")) {
@@ -51,6 +48,9 @@ public class Client {
 				    }
 				    if (args[0].equals("/cmd")) {
 				        chat.onCommand();
+				    }
+				    if (args[0].equals("/g")) {
+				        chat.onGroup();
 				    }
 				    chat.processInput(socket, args);
 

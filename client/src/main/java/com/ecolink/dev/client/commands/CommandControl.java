@@ -20,7 +20,7 @@ import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;
 
 @Getter
-@Command(name = "coc",
+@Command(name = "/cmd",
 	version = "0.0.0v",
 	description = "Send commands to EcoLink Server",
 	mixinStandardHelpOptions = true,
