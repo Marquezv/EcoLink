@@ -1,4 +1,4 @@
-package com.ecolink.dev.client.chat;
+package com.ecolink.dev.client.console;
 
 import java.net.Socket;
 
@@ -6,12 +6,12 @@ import com.ecolink.dev.client.commands.CommandControl;
 
 import picocli.CommandLine;
 
-public class ChatCommand implements ChatState {
+public class ConsoleCommand implements ConsoleState {
 	
 	private String name = "ChatCommand";
-	private Chat chat;
+	private Console chat;
 	
-	public ChatCommand(Chat chat) {
+	public ConsoleCommand(Console chat) {
 		super();
 		this.chat = chat;
 	}
@@ -23,22 +23,12 @@ public class ChatCommand implements ChatState {
 
 	@Override
 	public void onCommand() {
-		System.out.println("[MODE - CONSOLE]");
+		System.out.println("[MODE - COMMAND]");
 	}
-
+	
 	@Override
-	public void onGroup() {
-		this.chat.setState(new ChatGroup(this.chat));
-	}
-
-	@Override
-	public void onUser() {
-		this.chat.setState(new ChatUser(this.chat));
-	}
-
-	@Override
-	public void onGlobal() {
-		this.chat.setState(new ChatGlobal(this.chat));
+	public void onMessage() {
+		this.chat.setState(new ConsoleMessage(this.chat));
 	}
 
 	@Override
@@ -47,5 +37,7 @@ public class ChatCommand implements ChatState {
 		new CommandLine(commandControl)
 		.execute(args);			
 	}
+
+	
 
 }

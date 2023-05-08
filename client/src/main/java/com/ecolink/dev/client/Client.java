@@ -7,8 +7,8 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.Scanner;
 
-import com.ecolink.dev.client.chat.Chat;
 import com.ecolink.dev.client.commands.CommandControl;
+import com.ecolink.dev.client.console.Console;
 
 import picocli.CommandLine;
 
@@ -18,7 +18,7 @@ public class Client {
 	private Socket socket;
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
-	private Chat chat;
+	private Console chat;
 	
 	public  Client(Socket socket) {
 		try {
@@ -26,7 +26,7 @@ public class Client {
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			new CommandLine(new CommandControl(this.socket)).execute("-h");
 //			chat.onCommand();
-			this.chat = new Chat();
+			this.chat = new Console();
 		} catch (Exception e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
 		}
@@ -40,18 +40,14 @@ public class Client {
 				String messageToSend = scanner.nextLine();
 				if (messageToSend != null) {
 				    String[] args = messageToSend.split(" ");
-				    if (args[0].equals("/all")) {
-				        chat.onGlobal();
-				    }
-				    if (args[0].equals("/u")) {
-				        chat.onUser();
-				    }
-				    if (args[0].equals("/cmd")) {
+				    if (messageToSend.startsWith("/m")) {
+				        chat.onMessage();
+		                continue;
+		            }
+				    if (messageToSend.startsWith("/coc")) {
 				        chat.onCommand();
-				    }
-				    if (args[0].equals("/g")) {
-				        chat.onGroup();
-				    }
+		                continue;
+		            }
 				    chat.processInput(socket, args);
 
 				}

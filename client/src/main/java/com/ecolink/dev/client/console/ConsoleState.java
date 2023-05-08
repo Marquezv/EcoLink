@@ -1,13 +1,11 @@
-package com.ecolink.dev.client.chat;
+package com.ecolink.dev.client.console;
 
 import java.net.Socket;
 
-public interface ChatState {
+public interface ConsoleState {
 	
 	String getName();
 	void onCommand();
-	void onGroup();
-	void onUser();
-	void onGlobal();
+	void onMessage();
     void processInput(Socket socket,String[] args);
 }
