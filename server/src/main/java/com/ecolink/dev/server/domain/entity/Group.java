@@ -31,7 +31,7 @@ public class Group {
 	}
 	
 	public GroupDTO toDTO() {
-		return new GroupDTO(this.id,
+		return new GroupDTO(this.token,
 				this.name,
 				this.password,
 				this.tkAdmin,

@@ -18,7 +18,7 @@ public class Client {
 	private Socket socket;
 	private BufferedReader bufferedReader;
 	private BufferedWriter bufferedWriter;
-	private Console chat;
+	private Console console;
 	
 	public  Client(Socket socket) {
 		try {
@@ -26,7 +26,7 @@ public class Client {
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			new CommandLine(new CommandControl(this.socket)).execute("-h");
 //			chat.onCommand();
-			this.chat = new Console();
+			this.console = new Console();
 		} catch (Exception e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
 		}
@@ -41,15 +41,14 @@ public class Client {
 				if (messageToSend != null) {
 				    String[] args = messageToSend.split(" ");
 				    if (messageToSend.startsWith("/m")) {
-				        chat.onMessage();
+				        console.onMessage();
 		                continue;
 		            }
 				    if (messageToSend.startsWith("/coc")) {
-				        chat.onCommand();
+				        console.onCommand();
 		                continue;
 		            }
-				    chat.processInput(socket, args);
-
+				    console.processInput(socket, args);
 				}
 			}
 			scanner.close();

@@ -1,9 +1,12 @@
 package com.ecolink.dev.server.services;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.ecolink.dev.server.domain.GroupDTO;
+import com.ecolink.dev.server.domain.entity.Group;
 import com.ecolink.dev.server.repository.GroupDao;
 
 public class GroupServiceImpl implements GroupService {
@@ -27,6 +30,11 @@ public class GroupServiceImpl implements GroupService {
 	@Override
 	public void deleteGroup(GroupDTO groupDTO) throws SQLException {
 		groupDao.deleteByToken(groupDTO.getToken());
+	}
+	
+	@Override
+	public List<GroupDTO> getAllGroups() throws SQLException {
+		return groupDao.findAll().stream().map(Group::toDTO).collect(Collectors.toList());
 	}
 
 	@Override

@@ -1,6 +1,9 @@
 package com.ecolink.dev.server.services.listener;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.ecolink.dev.server.client.ClientHandler;
 import com.ecolink.dev.server.domain.GroupDTO;
@@ -42,6 +45,9 @@ public class GroupCommand implements ListenerFunction {
 		}
 		if (args[1].toString() == "open" || args[1].toString().equals("join")) {
 			open(args);
+		}
+		if (args[1].toString() == "list" || args[1].toString().equals("list")) {
+			list();
 		}
 	}
 
@@ -93,6 +99,25 @@ public class GroupCommand implements ListenerFunction {
 			messageService.unicastMessage("GROUP NOT FOUND");
 			e.printStackTrace();
 		}
+	}
+	
+	private void list()  {
+		List<GroupDTO> userList = new ArrayList<>();
+		try {
+			userList = groupService.getAllGroups();
+			messageService.unicastMessage(formatList(userList));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private String formatList(List<GroupDTO> list) {
+		List<String> listFormat = new ArrayList<String>();
+		for(GroupDTO groupDTO : list) {
+			listFormat.add("token:" + groupDTO.getToken() + "|user:" + groupDTO.getName() );
+		}
+		return listFormat.stream().map(item -> "\n* " + item)
+				.collect(Collectors.joining("\n"));
 	}
 
 }

@@ -23,10 +23,10 @@ public class ListSubcommand implements Runnable {
 	@Option(names = {"-o","--online"}, description = "Online")
 	private boolean online;
 	
-	@Option(names = {"-u","--users"}, description = "Online")
+	@Option(names = {"-u","--users"}, description = "User")
 	private boolean user;
 	
-	@Option(names = {"--group"}, description = "Group")
+	@Option(names = {"-g","--group"}, description = "Group")
 	private boolean group;
 	
 	@Override

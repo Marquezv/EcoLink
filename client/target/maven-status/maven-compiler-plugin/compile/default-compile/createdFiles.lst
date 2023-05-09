@@ -1,5 +1,7 @@
+com/ecolink/dev/client/console/ConsoleMessage.class
 com/ecolink/dev/client/commands/subcommands/ConfigSubcommand.class
 com/ecolink/dev/client/commands/CommandControl.class
+com/ecolink/dev/client/console/ConsoleCommand.class
 com/ecolink/dev/client/commands/subcommands/UserSubcommand.class
 com/ecolink/dev/client/services/ClientService.class
 com/ecolink/dev/client/Client.class
@@ -8,7 +10,9 @@ com/ecolink/dev/client/domain/Message.class
 com/ecolink/dev/client/commands/subcommands/ChatSubcommand.class
 com/ecolink/dev/client/domain/User.class
 com/ecolink/dev/client/services/ClientServiceImpl.class
+com/ecolink/dev/client/console/ConsoleState.class
 com/ecolink/dev/client/commands/subcommands/ModeSubcommand.class
 com/ecolink/dev/client/commands/subcommands/GroupSubcommand.class
 com/ecolink/dev/client/commands/subcommands/ListSubcommand.class
+com/ecolink/dev/client/console/Console.class
 com/ecolink/dev/client/commands/subcommands/TokenSubcommand.class

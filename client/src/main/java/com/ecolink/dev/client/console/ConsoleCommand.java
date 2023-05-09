@@ -37,7 +37,5 @@ public class ConsoleCommand implements ConsoleState {
 		new CommandLine(commandControl)
 		.execute(args);			
 	}
-
 	
-
 }
