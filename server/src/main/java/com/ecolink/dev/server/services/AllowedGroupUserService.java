@@ -3,6 +3,7 @@ package com.ecolink.dev.server.services;
 import java.sql.SQLException;
 
 import com.ecolink.dev.server.domain.GroupDTO;
+import com.ecolink.dev.server.domain.UserDTO;
 
 public interface AllowedGroupUserService {
 
@@ -13,4 +14,6 @@ public interface AllowedGroupUserService {
 	void updateUserLevel(GroupDTO groupDTO, String tkUser, Integer level) throws SQLException;
 	
 	String genAllowedId(GroupDTO groupDTO, String tkUser);
+	
+	boolean userInGroup(GroupDTO groupDTO, UserDTO userDTO);
 }

@@ -36,7 +36,7 @@ public class AllowedGroupUserDao implements JdbcDao<AllowedGroupUser> {
 	
 	@Override
 	public AllowedGroupUser findByToken(String tkGroup) throws SQLException {
-		String query = "SELECT * FROM allowedGroupUser WHERE tkGroup=?";
+		String query = "SELECT * FROM allowedGroupUser WHERE id=?";
 		Connection connection = ConnectJDBC.connectDB();
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setString(1, tkGroup);

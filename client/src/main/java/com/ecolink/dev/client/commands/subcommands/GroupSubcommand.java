@@ -45,10 +45,10 @@ public class GroupSubcommand implements Runnable {
 	@Option(names = {"--delete"}, description = "Delete group")
 	private boolean delete;
 	
-	@Option(names = {"open"}, description = "Join in conversation")
+	@Option(names = {"open"}, description = "Open conversation")
 	private boolean open;
 	
-	@Option(names = {"join"}, description = "Join in conversation")
+	@Option(names = {"join"}, description = "Join in group")
 	private boolean join;
 	
 	private boolean checkCredentials() {

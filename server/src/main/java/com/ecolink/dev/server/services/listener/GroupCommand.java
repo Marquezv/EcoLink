@@ -26,7 +26,7 @@ public class GroupCommand implements ListenerFunction {
 	private GroupService groupService;
 	private MessageService messageService;
 	private AllowedGroupUserService allowedGroupUserService;
-	
+
 	public GroupCommand(ClientHandler clientHandler) {
 		super();
 		this.clientHandler = clientHandler;
@@ -43,7 +43,10 @@ public class GroupCommand implements ListenerFunction {
 		if (args[1].toString() == "add" || args[1].toString().equals("add")) {
 			add(args);
 		}
-		if (args[1].toString() == "open" || args[1].toString().equals("join")) {
+		if (args[1].toString() == "join" || args[1].toString().equals("join")) {
+			open(args);
+		}
+		if (args[1].toString() == "open" || args[1].toString().equals("open")) {
 			open(args);
 		}
 		if (args[1].toString() == "list" || args[1].toString().equals("list")) {
@@ -51,35 +54,34 @@ public class GroupCommand implements ListenerFunction {
 		}
 	}
 
-	private void create(String...args)  {
+	private void create(String... args) {
 		UserDTO userDTO = clientHandler.getUserDTO();
 		System.out.println(userDTO);
-		if( userDTO != null) {
+		if (userDTO != null) {
 			String token = groupService.genGroupToken();
 			String name = args[2].toString();
 			String password = args[3].toString();
 			String tkAdmin = userDTO.getToken();
 			Integer userLimit = Integer.parseInt(args[4].toString());
-			
+
 			try {
 				GroupDTO groupDTO = new GroupDTO(token, name, password, tkAdmin, userLimit);
 				groupService.createGroup(groupDTO);
-				messageService.unicastMessage("[GROUP] token: " + groupDTO.getToken() + 
-						" name: " + groupDTO.getName());
+				messageService.unicastMessage("[GROUP] token: " + groupDTO.getToken() + " name: " + groupDTO.getName());
 			} catch (SQLException e) {
 				e.printStackTrace();
 				messageService.unicastMessage("[ERROR] Create group");
 			}
-		}else {
+		} else {
 			messageService.unicastMessage("User not loged");
 		}
-		
+
 	}
-	
-	private void add(String...args) {
-		String tkGroup = args[2].toString(); 
+
+	private void add(String... args) {
+		String tkGroup = args[2].toString();
 		String tkUser = args[3].toString();
-		
+
 		try {
 			GroupDTO groupDTO = groupService.findGroup(tkGroup);
 			allowedGroupUserService.addUser(groupDTO, tkUser);
@@ -88,20 +90,31 @@ public class GroupCommand implements ListenerFunction {
 			e.printStackTrace();
 		}
 	}
-	
-	private void open(String...args) {
-		String tkGroup = args[2].toString(); 
-		
+
+	private void open(String... args) {
+		String tkGroup = args[2].toString();
+
 		try {
 			GroupDTO groupDTO = groupService.findGroup(tkGroup);
-			messageService.unicastMessage("-------GROUP: " + groupDTO.getName() + " | " + groupDTO.getToken() + " -------");
+			messageService
+					.unicastMessage("-------GROUP: " + groupDTO.getName() + " | " + groupDTO.getToken() + " -------");
 		} catch (Exception e) {
 			messageService.unicastMessage("GROUP NOT FOUND");
-			e.printStackTrace();
 		}
 	}
 	
-	private void list()  {
+	private void join(String... args) {
+		String tkGroup = args[2].toString();
+		try {
+			GroupDTO groupDTO = groupService.findGroup(tkGroup);
+			messageService
+					.unicastMessage("-------GROUP: " + groupDTO.getName() + " | " + groupDTO.getToken() + " -------");
+		} catch (Exception e) {
+			messageService.unicastMessage("GROUP NOT FOUND");
+		}
+	}
+	
+	private void list() {
 		List<GroupDTO> userList = new ArrayList<>();
 		try {
 			userList = groupService.getAllGroups();
@@ -110,14 +123,13 @@ public class GroupCommand implements ListenerFunction {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private String formatList(List<GroupDTO> list) {
 		List<String> listFormat = new ArrayList<String>();
-		for(GroupDTO groupDTO : list) {
-			listFormat.add("token:" + groupDTO.getToken() + "|user:" + groupDTO.getName() );
+		for (GroupDTO groupDTO : list) {
+			listFormat.add("token:" + groupDTO.getToken() + "|user:" + groupDTO.getName());
 		}
-		return listFormat.stream().map(item -> "\n* " + item)
-				.collect(Collectors.joining("\n"));
+		return listFormat.stream().map(item -> "\n* " + item).collect(Collectors.joining("\n"));
 	}
 
 }

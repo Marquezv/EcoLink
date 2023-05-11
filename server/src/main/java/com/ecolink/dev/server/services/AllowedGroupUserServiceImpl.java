@@ -3,6 +3,7 @@ package com.ecolink.dev.server.services;
 import java.sql.SQLException;
 
 import com.ecolink.dev.server.domain.GroupDTO;
+import com.ecolink.dev.server.domain.UserDTO;
 import com.ecolink.dev.server.domain.entity.AllowedGroupUser;
 import com.ecolink.dev.server.repository.AllowedGroupUserDao;
 
@@ -51,6 +52,14 @@ public class AllowedGroupUserServiceImpl implements AllowedGroupUserService {
 	@Override
 	public String genAllowedId(GroupDTO groupDTO, String tkUser) {
 		return groupDTO.getId() + "-" + tkUser;
+	}
+
+	@Overrides
+	public boolean userInGroup(GroupDTO groupDTO, UserDTO userDTO) {
+		for(AllowedGroupUser allowedGroupUser : allowedGroupUserDao.findAll()) {
+			if(allowedGroupUser.getTkGroup())
+		}
+		return false;
 	}
 	
 	
