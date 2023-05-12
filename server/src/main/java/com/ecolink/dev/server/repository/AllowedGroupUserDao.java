@@ -93,6 +93,21 @@ public class AllowedGroupUserDao implements JdbcDao<AllowedGroupUser> {
         connection.close();
 	}
 	
+	public List<AllowedGroupUser> findGroup(String tkGroup) throws SQLException {
+        String query = "SELECT * FROM allowedGroupUser WHERE tkGroup=?";
+        List<AllowedGroupUser> allowed = new ArrayList<>();
+        try(Connection conn = ConnectJDBC.connectDB()) {
+			PreparedStatement statement = conn.prepareStatement(query);
+			ResultSet resultSet = statement.executeQuery();
+			while(resultSet.next()) {
+				AllowedGroupUser allowedGroupUser = mapRowToUser(resultSet);
+				allowed.add(allowedGroupUser);
+			}
+			conn.close();
+		}
+		return allowed;
+	}
+	
 	private AllowedGroupUser mapRowToUser(ResultSet resultSet) throws SQLException {
         String id = resultSet.getString("id");
         String tkGroup = resultSet.getString("tkGroup");

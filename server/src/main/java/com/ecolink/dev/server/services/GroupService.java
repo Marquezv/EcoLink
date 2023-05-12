@@ -9,13 +9,17 @@ public interface GroupService {
 
 	void createGroup(GroupDTO groupDTO) throws SQLException;
 	
+	void addUser(String tkGrop, String tkUser) throws SQLException;
+	
+	void openGroup(GroupDTO groupDTO) throws Exception;
+	
 	GroupDTO findGroup(String tkGroup);
 	
 	List<GroupDTO> getAllGroups() throws SQLException;
 	
-	void updateGroup(GroupDTO groupDTO, String password) throws SQLException;
+	void updateGroup(String tkGrop, String password) throws SQLException;
 
-	void deleteGroup(GroupDTO groupDTO) throws SQLException;
+	void deleteGroup(String tkGrop) throws SQLException;
 
 	String genGroupToken();
 }

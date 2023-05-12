@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import com.ecolink.dev.server.client.cli.Console;
+import com.ecolink.dev.server.client.cli.ConsoleCommand;
 import com.ecolink.dev.server.domain.UserDTO;
 import com.ecolink.dev.server.services.MessageService;
 import com.ecolink.dev.server.services.MessageServiceImpl;
@@ -22,6 +24,7 @@ public class ClientHandler implements Runnable{
 	private BufferedWriter bufferedWriter;
 	private UserDTO userDTO;
 	private MessageService messageService;
+	private Console console;
 	
     // Filas de mensagens apos logar ler as mensagens na fila
 	public ClientHandler(Socket socket) {
@@ -30,12 +33,13 @@ public class ClientHandler implements Runnable{
 			this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.messageService = new MessageServiceImpl(this);
+			this.console = new Console();
 		    clientHandlers.add(this);
 		}catch (Exception e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
 	}
-
+	
 	public ArrayList<ClientHandler> getClientHandlers() {
 		return clientHandlers;
 	}
@@ -50,6 +54,14 @@ public class ClientHandler implements Runnable{
 
 	public void setUserDTO(UserDTO userDTO) {
 		this.userDTO = userDTO;
+	}
+	
+	public Console getConsole() {
+		return console;
+	}
+
+	public void setConsole(Console console) {
+		this.console = console;
 	}
 
 	
@@ -71,10 +83,18 @@ public class ClientHandler implements Runnable{
 			while(socket.isConnected()) {
 				messageFromClient = bufferedReader.readLine();
 				String[] msgArray = messageFromClient.split("\\s");
-				System.out.println(messageFromClient);
-				ListenerFactory factory = new ListenerFactory();
-				ListenerFunction function = factory.createStringFunction(this, msgArray);
-				function.apply(msgArray);
+				System.out.println(console.getState().getName());
+				if(console.getState().getName().equals("ConsoleCommand")) {
+					ListenerFactory factory = new ListenerFactory();
+					ListenerFunction function = factory.createStringFunction(this, msgArray);
+					function.apply(msgArray);
+				} 
+				if(console.getState().getName().equals("ConsoleMessage")) {
+					//
+				}
+				
+				
+				
 				
 			}	
 		} catch (Exception e) {

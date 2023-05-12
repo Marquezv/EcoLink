@@ -1,19 +1,18 @@
-package com.ecolink.dev.client.console;
+package com.ecolink.dev.server.client.cli;
 
-import java.io.IOException;
 import java.net.Socket;
-
-import com.ecolink.dev.client.services.ClientService;
-import com.ecolink.dev.client.services.ClientServiceImpl;
 
 public class ConsoleMessage implements ConsoleState {
 	
-	private String name = "ChatMessage";
+	private String name = "ConsoleMessage";
 	private Console chat;
+//	private ClientService clientService;
 	
-	public ConsoleMessage(Console chat) throws IOException {
+	public ConsoleMessage(Console chat) {
 		super();
 		this.chat = chat;
+//		this.clientService = new ClientServiceImpl(socket);
+
 	}
 
 	@Override
@@ -28,16 +27,13 @@ public class ConsoleMessage implements ConsoleState {
 	
 	@Override
 	public void onMessage() {
-		System.out.println("[MODE - MESSAGE]");
 	}
 
 	@Override
 	public void processInput(Socket socket, String[] args) {
-		
 		try {
-			ClientService clientService = new ClientServiceImpl(socket);
 			String reversedMessage = String.join(" ", args);
-			clientService.sendString(reversedMessage);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

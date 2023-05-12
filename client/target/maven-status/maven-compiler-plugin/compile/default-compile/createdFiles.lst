@@ -11,8 +11,7 @@ com/ecolink/dev/client/commands/subcommands/ChatSubcommand.class
 com/ecolink/dev/client/domain/User.class
 com/ecolink/dev/client/services/ClientServiceImpl.class
 com/ecolink/dev/client/console/ConsoleState.class
-com/ecolink/dev/client/commands/subcommands/ModeSubcommand.class
 com/ecolink/dev/client/commands/subcommands/GroupSubcommand.class
 com/ecolink/dev/client/commands/subcommands/ListSubcommand.class
-com/ecolink/dev/client/console/Console.class
 com/ecolink/dev/client/commands/subcommands/TokenSubcommand.class
+com/ecolink/dev/client/console/Console.class

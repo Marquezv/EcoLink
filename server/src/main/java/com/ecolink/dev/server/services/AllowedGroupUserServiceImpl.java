@@ -1,36 +1,37 @@
 package com.ecolink.dev.server.services;
 
 import java.sql.SQLException;
+import java.util.List;
 
-import com.ecolink.dev.server.domain.GroupDTO;
-import com.ecolink.dev.server.domain.UserDTO;
 import com.ecolink.dev.server.domain.entity.AllowedGroupUser;
 import com.ecolink.dev.server.repository.AllowedGroupUserDao;
 
 public class AllowedGroupUserServiceImpl implements AllowedGroupUserService {
 
 	private AllowedGroupUserDao allowedGroupUserDao;
-
+	
 	public AllowedGroupUserServiceImpl(AllowedGroupUserDao allowedGroupUserDao) {
 		this.allowedGroupUserDao = allowedGroupUserDao;
 	}
 
 	@Override
-	public void addUser(GroupDTO groupDTO, String tkUser) throws SQLException {
+	public void addUser(String tkGroup, String tkUser) throws SQLException {
 		try {
-			String id_allowed = genAllowedId(groupDTO, tkUser);
-			AllowedGroupUser allowedGroupUser = new AllowedGroupUser(
-					id_allowed, groupDTO.getToken(), tkUser, 0);
-			allowedGroupUserDao.save(allowedGroupUser);
+			if(!hasUser(tkGroup, tkUser)) {
+				String id_allowed = genAllowedId(tkGroup, tkUser);
+				AllowedGroupUser allowedGroupUser = new AllowedGroupUser(
+						id_allowed, tkGroup, tkUser, 0);
+				allowedGroupUserDao.save(allowedGroupUser);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void removeUser(GroupDTO groupDTO, String tkUser) throws SQLException {
+	public void removeUser(String tkGroup, String tkUser) throws SQLException {
 		try {
-			String id_allowed = genAllowedId(groupDTO, tkUser);
+			String id_allowed = genAllowedId(tkGroup, tkUser);
 			allowedGroupUserDao.deleteByToken(id_allowed);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -38,9 +39,9 @@ public class AllowedGroupUserServiceImpl implements AllowedGroupUserService {
 	}
 
 	@Override
-	public void updateUserLevel(GroupDTO groupDTO, String tkUser, Integer level) throws SQLException {
+	public void updateUserLevel(String tkGroup, String tkUser, Integer level) throws SQLException {
 		try {
-			String id_allowed = genAllowedId(groupDTO, tkUser);
+			String id_allowed = genAllowedId(tkGroup, tkUser);
 			AllowedGroupUser allowed = allowedGroupUserDao.findByToken(id_allowed);
 			allowed.setLevel(level);
 			allowedGroupUserDao.update(allowed);
@@ -50,17 +51,18 @@ public class AllowedGroupUserServiceImpl implements AllowedGroupUserService {
 	}
 
 	@Override
-	public String genAllowedId(GroupDTO groupDTO, String tkUser) {
-		return groupDTO.getId() + "-" + tkUser;
+	public String genAllowedId(String tkGroup, String tkUser) {
+		return tkGroup + "-" + tkUser;
 	}
 
-	@Overrides
-	public boolean userInGroup(GroupDTO groupDTO, UserDTO userDTO) {
-		for(AllowedGroupUser allowedGroupUser : allowedGroupUserDao.findAll()) {
-			if(allowedGroupUser.getTkGroup())
-		}
-		return false;
+	@Override
+	public List<AllowedGroupUser> findGroup(String tkGroup) throws SQLException {
+		return allowedGroupUserDao.findGroup(tkGroup);
 	}
 	
+	@Override
+	public boolean hasUser(String tkGroup, String tkUser) throws SQLException {
+		return findGroup(tkGroup).stream().anyMatch(allowed -> allowed.getTkUser().equals(tkUser));
+	}
 	
 }

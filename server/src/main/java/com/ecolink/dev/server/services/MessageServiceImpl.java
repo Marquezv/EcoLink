@@ -3,6 +3,7 @@ package com.ecolink.dev.server.services;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
 
 import com.ecolink.dev.server.client.ClientHandler;
 import com.ecolink.dev.server.domain.UserDTO;
@@ -74,6 +75,22 @@ public class MessageServiceImpl implements MessageService{
 		} catch (IOException e) {
 			e.printStackTrace();
         }
+	}
+
+	@Override
+	public void anyMessage(String messageToSend, List<ClientHandler> group) {
+		for(ClientHandler clients : group) {
+			try {
+				String userToken = clientHandler.getUserDTO().getToken();
+				if(!clients.getUserDTO().getToken().equals(userToken)) {
+					clients.getBufferedWriter().write("[GROUP]: " + messageToSend);
+					clients.getBufferedWriter().newLine();
+					clients.getBufferedWriter().flush();
+				}
+			}catch (IOException e) {
+				e.printStackTrace();
+	        }
+		}
 	}
 	
 	

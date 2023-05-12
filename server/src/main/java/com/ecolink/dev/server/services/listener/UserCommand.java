@@ -35,7 +35,7 @@ public class UserCommand implements ListenerFunction{
 		if(args[1].toString() == "create-user" || args[1].toString().equals("create-user")) {
 			create(args);
 		}
-		if(args[1].toString() == "update-user" || args[1].toString().equals("updates-user")) {
+		if(args[1].toString() == "update-user" || args[1].toString().equals("update-user")) {
 			update(args);
 		}
 		if(args[1].toString() == "gtoken" || args[1].toString().equals("gtoken")) {
@@ -81,7 +81,7 @@ public class UserCommand implements ListenerFunction{
 		if( userDTO != null) {
 			userDTO.setName(args[2]);
 			userDTO.setPassword(args[3]);
-			
+			System.out.println(userDTO);
 			try {
 				userService.updateUser(userDTO);
 				messageService.unicastMessage("[Update] token: " + userDTO.getToken() + " name: " + userDTO.getName());

@@ -1,5 +1,6 @@
 package com.ecolink.dev.client.console;
 
+import java.io.IOException;
 import java.net.Socket;
 
 import com.ecolink.dev.client.commands.CommandControl;
@@ -28,7 +29,11 @@ public class ConsoleCommand implements ConsoleState {
 	
 	@Override
 	public void onMessage() {
-		this.chat.setState(new ConsoleMessage(this.chat));
+		try {
+			this.chat.setState(new ConsoleMessage(this.chat));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

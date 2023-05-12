@@ -1,19 +1,22 @@
 package com.ecolink.dev.server.services;
 
 import java.sql.SQLException;
+import java.util.List;
 
-import com.ecolink.dev.server.domain.GroupDTO;
-import com.ecolink.dev.server.domain.UserDTO;
+import com.ecolink.dev.server.domain.entity.AllowedGroupUser;
 
 public interface AllowedGroupUserService {
 
-	void addUser(GroupDTO groupDTO, String tkUser) throws SQLException;
+	void addUser(String tkGroup, String tkUser) throws SQLException;
 	
-	void removeUser(GroupDTO groupDTO, String tkUser) throws SQLException;
+	void removeUser(String tkGroup, String tkUser) throws SQLException;
 	
-	void updateUserLevel(GroupDTO groupDTO, String tkUser, Integer level) throws SQLException;
+	void updateUserLevel(String tkGroup, String tkUser, Integer level) throws SQLException;
 	
-	String genAllowedId(GroupDTO groupDTO, String tkUser);
+	String genAllowedId(String tkGroup, String tkUser);
 	
-	boolean userInGroup(GroupDTO groupDTO, UserDTO userDTO);
+	List<AllowedGroupUser> findGroup(String tkGroup) throws SQLException;
+	
+	boolean hasUser(String tkGroup, String tkUser) throws SQLException;
 }
+

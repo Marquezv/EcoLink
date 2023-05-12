@@ -26,7 +26,7 @@ public class ListCommand implements ListenerFunction{
 	public ListCommand(ClientHandler clientHandler) {
 		super();
 		this.messageService = new MessageServiceImpl(clientHandler);
-		this.groupService = new GroupServiceImpl(new GroupDao());
+		this.groupService = new GroupServiceImpl(new GroupDao(), clientHandler);
 		this.userService = new UserServiceImpl(new UserDao(), clientHandler);
 	}
 
