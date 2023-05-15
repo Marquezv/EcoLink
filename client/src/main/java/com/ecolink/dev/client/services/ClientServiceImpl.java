@@ -16,7 +16,6 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	public void sendString(String message) {
 		try {
-
 			bufferedWriter.write(message);
 			bufferedWriter.newLine();
 			bufferedWriter.flush();

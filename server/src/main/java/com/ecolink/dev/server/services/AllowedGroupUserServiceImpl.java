@@ -2,6 +2,7 @@ package com.ecolink.dev.server.services;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.ecolink.dev.server.domain.entity.AllowedGroupUser;
 import com.ecolink.dev.server.repository.AllowedGroupUserDao;
@@ -63,6 +64,13 @@ public class AllowedGroupUserServiceImpl implements AllowedGroupUserService {
 	@Override
 	public boolean hasUser(String tkGroup, String tkUser) throws SQLException {
 		return findGroup(tkGroup).stream().anyMatch(allowed -> allowed.getTkUser().equals(tkUser));
+	}
+
+	@Override
+	public List<String> findAllUserGroupTk(String tkGroup) throws SQLException {
+		System.out.println(findGroup(tkGroup).stream().collect(Collectors.toList()));
+		return findGroup(tkGroup).stream().map(AllowedGroupUser::getTkUser).collect(Collectors.toList());
+
 	}
 	
 }

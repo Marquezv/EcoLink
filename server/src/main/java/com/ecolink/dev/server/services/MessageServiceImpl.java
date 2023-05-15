@@ -76,21 +76,28 @@ public class MessageServiceImpl implements MessageService{
 			e.printStackTrace();
         }
 	}
-
+	
 	@Override
-	public void anyMessage(String messageToSend, List<ClientHandler> group) {
-		for(ClientHandler clients : group) {
+	public void anyMessage(String messageToSend, List<String> group, String tkGroup) {
+		for(ClientHandler clients: clientHandler.getClientHandlers()) {
 			try {
-				String userToken = clientHandler.getUserDTO().getToken();
-				if(!clients.getUserDTO().getToken().equals(userToken)) {
-					clients.getBufferedWriter().write("[GROUP]: " + messageToSend);
-					clients.getBufferedWriter().newLine();
-					clients.getBufferedWriter().flush();
+				for(String tkClient : group) {
+					String userToken = clientHandler.getUserDTO().getToken();
+					if(!clients.getUserDTO().getToken().equals(userToken) && userToken.equals(tkClient)) {
+						clients.getBufferedWriter().write("[GROUP]:"+ "["+ tkGroup +"]:[USER]:"+ clientHandler.getUserDTO().getToken() + "|" + messageToSend);
+						clients.getBufferedWriter().newLine();
+						clients.getBufferedWriter().flush();
+					}
 				}
 			}catch (IOException e) {
 				e.printStackTrace();
 	        }
 		}
+	}
+
+	@Override
+	public void queueMessage(String messageToSend, String tk) {
+		
 	}
 	
 	

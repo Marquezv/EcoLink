@@ -2,14 +2,13 @@ package com.ecolink.dev.server.services;
 
 import java.util.List;
 
-import com.ecolink.dev.server.client.ClientHandler;
-
 public interface MessageService {
 	
+	void queueMessage(String messageToSend, String tk);
 	void unicastMessage(String messageToSend);
 	void sendToTokens(String messageToSend, String tkUser);
 	void broadcastMessage(String messageToSend);
-	void anyMessage(String messageToSend, List<ClientHandler> group);
+	void anyMessage(String messageToSend, List<String> group, String tkGroup); //List users:Tokens
 	void close();
 
 }

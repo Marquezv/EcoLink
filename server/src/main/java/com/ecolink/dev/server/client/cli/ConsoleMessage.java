@@ -2,17 +2,18 @@ package com.ecolink.dev.server.client.cli;
 
 import java.net.Socket;
 
+import com.ecolink.dev.server.client.ClientHandler;
+import com.ecolink.dev.server.repository.GroupDao;
+import com.ecolink.dev.server.services.GroupServiceImpl;
+
 public class ConsoleMessage implements ConsoleState {
 	
 	private String name = "ConsoleMessage";
 	private Console chat;
-//	private ClientService clientService;
 	
 	public ConsoleMessage(Console chat) {
 		super();
 		this.chat = chat;
-//		this.clientService = new ClientServiceImpl(socket);
-
 	}
 
 	@Override
@@ -30,10 +31,11 @@ public class ConsoleMessage implements ConsoleState {
 	}
 
 	@Override
-	public void processInput(Socket socket, String[] args) {
+	public void processInput(Socket socket, ClientHandler clientHandler, String[] args) {
 		try {
-			String reversedMessage = String.join(" ", args);
-			
+	        String message = String.join(" ", args);
+	        System.out.println("Message: " + message + " From: " + clientHandler.getUserDTO().getName() + " Group: " + chat.getTkConnection());
+			new GroupServiceImpl(new GroupDao(), clientHandler).sendGroup(chat.getTkConnection(), message);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

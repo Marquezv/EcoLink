@@ -5,7 +5,7 @@ import java.net.Socket;
 public class Console {
 	
 	private ConsoleState state = new ConsoleCommand(this);
-	
+	private Socket socket;
 	
 	public ConsoleState getState() {
 		return this.state;
@@ -30,6 +30,14 @@ public class Console {
 	
 	public void processInput(Socket socket, String...args) {
 		this.state.processInput(socket, args);
+	}
+
+	public Socket getSocket() {
+		return socket;
+	}
+
+	public void setSocket(Socket socket) {
+		this.socket = socket;
 	}
 	
 }

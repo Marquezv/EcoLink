@@ -2,11 +2,13 @@ package com.ecolink.dev.server.client.cli;
 
 import java.net.Socket;
 
+import com.ecolink.dev.server.client.ClientHandler;
+
 public class Console {
 	
 	private ConsoleState state = new ConsoleCommand(this);
-	//tkGroup or TkUser
 	private String tkConnection;
+	private ClientHandler clientHandler;
 	
 	public ConsoleState getState() {
 		return this.state;
@@ -28,8 +30,8 @@ public class Console {
 		this.state.onMessage();
 	}
 	
-	public void processInput(Socket socket, String...args) {
-		this.state.processInput(socket, args);
+	public void processInput(Socket socket, ClientHandler clientHanldler, String...args ) {
+		this.state.processInput(socket, clientHandler, args);
 	}
 
 	public String getTkConnection() {
@@ -38,6 +40,14 @@ public class Console {
 
 	public void setTkConnection(String tkConnection) {
 		this.tkConnection = tkConnection;
+	}
+
+	public ClientHandler getClientHandler() {
+		return clientHandler;
+	}
+
+	public void setClientHandler(ClientHandler clientHandler) {
+		this.clientHandler = clientHandler;
 	}
 	
 }

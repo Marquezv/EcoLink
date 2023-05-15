@@ -2,6 +2,8 @@ package com.ecolink.dev.server.client.cli;
 
 import java.net.Socket;
 
+import com.ecolink.dev.server.client.ClientHandler;
+
 public class ConsoleCommand implements ConsoleState {
 	
 	private String name = "ConsoleCommand";
@@ -27,7 +29,7 @@ public class ConsoleCommand implements ConsoleState {
 	}
 
 	@Override
-	public void processInput(Socket socket, String[] args) {
+	public void processInput(Socket socket, ClientHandler clientHandler, String[] args) {
 //		CommandControl commandControl = new CommandControl(socket);
 //		new CommandLine(commandControl)
 //		.execute(args);			

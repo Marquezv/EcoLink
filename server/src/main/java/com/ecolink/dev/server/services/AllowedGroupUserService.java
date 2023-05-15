@@ -17,6 +17,8 @@ public interface AllowedGroupUserService {
 	
 	List<AllowedGroupUser> findGroup(String tkGroup) throws SQLException;
 	
+	List<String> findAllUserGroupTk(String tkGroup) throws SQLException;
+	
 	boolean hasUser(String tkGroup, String tkUser) throws SQLException;
 }
 

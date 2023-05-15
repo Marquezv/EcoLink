@@ -72,9 +72,9 @@ public class GroupServiceImpl implements GroupService {
 	@Override
 	public void addUser(String tkGrop, String tkUser) throws SQLException {
 		try {
-			GroupDTO group = findGroup(tkGrop);
+			GroupDTO groupDTO = findGroup(tkGrop);
 			UserDTO user = userService.getUserByToken(tkUser);
-			allowedGroupUserService.addUser(group.getToken(), user.getToken());
+			allowedGroupUserService.addUser(groupDTO.getToken(), user.getToken());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -91,7 +91,17 @@ public class GroupServiceImpl implements GroupService {
 			messageService.unicastMessage("[ERROR - OPEN_GROUP]");
 		}
 		
-		
+	}
+
+	@Override
+	public void sendGroup(String tkGroup, String messsage) throws Exception {
+		try {
+			GroupDTO groupDTO = groupDao.findByToken(tkGroup).toDTO();
+			List<String> groupMembers = allowedGroupUserService.findAllUserGroupTk(groupDTO.getToken());
+			messageService.anyMessage(messsage, groupMembers, groupDTO.getToken());
+		} catch (Exception e) {
+			messageService.unicastMessage("[ERROR - SEND_GROUP]");
+		}
 	}
 
 }

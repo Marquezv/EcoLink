@@ -25,7 +25,6 @@ public class Client {
 			this.socket = socket;
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			new CommandLine(new CommandControl(this.socket)).execute("-h");
-//			chat.onCommand();
 			this.console = new Console();
 		} catch (Exception e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
@@ -39,6 +38,7 @@ public class Client {
 			while(socket.isConnected()) {
 				String messageToSend = scanner.nextLine();
 				if (messageToSend != null) {
+					console.setSocket(socket);
 				    String[] args = messageToSend.split(" ");
 				    if (messageToSend.startsWith("/m")) {
 				        console.onMessage();
