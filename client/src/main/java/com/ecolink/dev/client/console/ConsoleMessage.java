@@ -10,10 +10,12 @@ public class ConsoleMessage implements ConsoleState {
 	
 	private String name = "ChatMessage";
 	private Console chat;
+	private ClientService clientService;
 	
 	public ConsoleMessage(Console chat) throws IOException {
 		super();
 		this.chat = chat;
+		this.clientService = new ClientServiceImpl(chat.getSocket());
 	}
 
 	@Override
@@ -35,8 +37,7 @@ public class ConsoleMessage implements ConsoleState {
 	public void processInput(Socket socket, String[] args) {
 		
 		try {
-			ClientService clientService = new ClientServiceImpl(socket);
-			String reversedMessage = String.join(" ", args);
+			String reversedMessage = String.join(" ", args);	
 			clientService.sendString(reversedMessage);
 		} catch (Exception e) {
 			e.printStackTrace();

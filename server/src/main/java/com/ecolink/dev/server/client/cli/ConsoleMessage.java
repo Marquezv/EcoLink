@@ -3,8 +3,6 @@ package com.ecolink.dev.server.client.cli;
 import java.net.Socket;
 
 import com.ecolink.dev.server.client.ClientHandler;
-import com.ecolink.dev.server.repository.GroupDao;
-import com.ecolink.dev.server.services.GroupServiceImpl;
 
 public class ConsoleMessage implements ConsoleState {
 	
@@ -35,7 +33,7 @@ public class ConsoleMessage implements ConsoleState {
 		try {
 	        String message = String.join(" ", args);
 	        System.out.println("Message: " + message + " From: " + clientHandler.getUserDTO().getName() + " Group: " + chat.getTkConnection());
-			new GroupServiceImpl(new GroupDao(), clientHandler).sendGroup(chat.getTkConnection(), message);
+//			new GroupServiceImpl(new GroupDao(), clientHandler).sendGroup(chat.getTkConnection(), message);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

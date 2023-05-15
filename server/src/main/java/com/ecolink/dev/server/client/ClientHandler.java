@@ -82,16 +82,16 @@ public class ClientHandler implements Runnable {
 			while (socket.isConnected()) {
 				messageFromClient = bufferedReader.readLine();
 				String[] msgArray = messageFromClient.split("\\s");
-				System.out.println(messageFromClient);
-//				if (msgArray[1].equals("login")) {
-//					ListenerFactory factory = new ListenerFactory();
-//					ListenerFunction function = factory.createStringFunction(this, msgArray);
-//					function.apply(msgArray);
-//				}
-//				else if(this.userDTO == null ) {
-//					messageService.unicastMessage("[SERVER] Make your login -> user --login -tk=<your_token> -p=<your_pass>");
-//				} 
-//				else {
+				System.out.println(console.getState());
+				if (msgArray[1].equals("login")) {
+					ListenerFactory factory = new ListenerFactory();
+					ListenerFunction function = factory.createStringFunction(this, msgArray);
+					function.apply(msgArray);
+				}
+				else if(this.userDTO == null ) {
+					messageService.unicastMessage("[SERVER] Make your login -> user --login -tk=<your_token> -p=<your_pass>");
+				} 
+				else {
 					if (console.getState().getName().equals("ConsoleCommand")) {
 						ListenerFactory factory = new ListenerFactory();
 						ListenerFunction function = factory.createStringFunction(this, msgArray);
@@ -101,10 +101,11 @@ public class ClientHandler implements Runnable {
 						console.onCommand();
 					}
 					if (console.getState().getName().equals("ConsoleMessage")) {
+						System.out.println(messageFromClient);
 						console.setClientHandler(this);
 						console.processInput(socket, this, messageFromClient);
 					}
-				
+				}
 			}
 		} catch (Exception e) {
 			if (this.userDTO != null) {
