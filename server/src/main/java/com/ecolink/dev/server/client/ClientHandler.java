@@ -82,28 +82,31 @@ public class ClientHandler implements Runnable{
 				messageFromClient = bufferedReader.readLine();
 				String[] msgArray = messageFromClient.split("\\s");
 				System.out.println(console.getState().getName());
-
-				if(console.getState().getName().equals("ConsoleCommand")) {
+				
+				if(msgArray[0].equals("user") && msgArray[1].equals("login")) {
 					ListenerFactory factory = new ListenerFactory();
 					ListenerFunction function = factory.createStringFunction(this, msgArray);
 					function.apply(msgArray);
-				} 
-				if (msgArray[0].equals("/q")) {
-					console.onCommand();
-					System.out.println(console.getState().getName());
 				}
-				if(msgArray[0].equals("/m")) {
-					console.onMessage();
-					System.out.println(console.getState().getName());
+				else if(this.userDTO != null) {
+					if(console.getState().getName().equals("ConsoleCommand")) {
+						ListenerFactory factory = new ListenerFactory();
+						ListenerFunction function = factory.createStringFunction(this, msgArray);
+						function.apply(msgArray);
+					} 
+					if (msgArray[0].equals("/q")) {
+						console.onCommand();
+						continue;
+					}
+					if(msgArray[0].equals("/m")) {
+						console.onMessage();
+						continue;
+					}
+				} else {
+					messageService.unicastMessage("Make your login: user --login -tk=<your_token> -p=<your_pass>");
 				}
-//				if (console.getState().getName().equals("ConsoleMessage")) {
-//					console.setClientHandler(this);
-//					console.processInput(socket, this, messageFromClient);
-//				}
-//				if (console.getState().getName().equals("ConsoleMessage")) {
-//					console.setClientHandler(this);
-//					console.processInput(socket, this, messageFromClient);
-//				}
+				
+				console.processInput(socket, this, messageFromClient);
 				
 				
 				
