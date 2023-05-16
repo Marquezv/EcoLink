@@ -3,7 +3,6 @@ package com.ecolink.dev.client.console;
 import java.io.IOException;
 import java.net.Socket;
 
-import com.ecolink.dev.client.services.ClientService;
 import com.ecolink.dev.client.services.ClientServiceImpl;
 
 public class ConsoleMessage implements ConsoleState {
@@ -35,9 +34,8 @@ public class ConsoleMessage implements ConsoleState {
 	public void processInput(Socket socket, String[] args) {
 		
 		try {
-			ClientService clientService = new ClientServiceImpl(socket);
 			String reversedMessage = String.join(" ", args);
-			clientService.sendString(reversedMessage);
+			new ClientServiceImpl(socket).sendString(reversedMessage);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

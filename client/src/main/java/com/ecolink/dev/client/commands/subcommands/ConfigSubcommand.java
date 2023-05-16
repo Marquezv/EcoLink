@@ -30,9 +30,6 @@ public class ConfigSubcommand implements Runnable{
 	@Option(names = {"-p", "--password"}, description = "Your New Password")
 	private String password;
 	
-	@Option(names = {"ping"}, description = "Ping Server")
-	private boolean ping;
-	
 	private boolean checkCredentials() {
 		if ((username != "" || username != null) && (password != "" || password != null) && (token != "" || token != null)) {
 			return true;

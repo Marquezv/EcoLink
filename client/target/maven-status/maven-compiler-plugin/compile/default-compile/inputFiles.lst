@@ -3,7 +3,6 @@
 /home/vmarques/EcoLink/client/src/main/java/com/ecolink/dev/client/console/Console.java
 /home/vmarques/EcoLink/client/src/main/java/com/ecolink/dev/client/domain/Message.java
 /home/vmarques/EcoLink/client/src/main/java/com/ecolink/dev/client/Client.java
-/home/vmarques/EcoLink/client/src/main/java/com/ecolink/dev/client/commands/subcommands/ChatSubcommand.java
 /home/vmarques/EcoLink/client/src/main/java/com/ecolink/dev/client/commands/subcommands/UserSubcommand.java
 /home/vmarques/EcoLink/client/src/main/java/com/ecolink/dev/client/services/ClientServiceImpl.java
 /home/vmarques/EcoLink/client/src/main/java/com/ecolink/dev/client/commands/subcommands/TokenSubcommand.java

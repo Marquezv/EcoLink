@@ -7,7 +7,6 @@ com/ecolink/dev/client/services/ClientService.class
 com/ecolink/dev/client/Client.class
 com/ecolink/dev/client/commands/subcommands/SendMessageSubcommand.class
 com/ecolink/dev/client/domain/Message.class
-com/ecolink/dev/client/commands/subcommands/ChatSubcommand.class
 com/ecolink/dev/client/domain/User.class
 com/ecolink/dev/client/services/ClientServiceImpl.class
 com/ecolink/dev/client/console/ConsoleState.class

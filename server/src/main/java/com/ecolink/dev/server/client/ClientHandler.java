@@ -9,7 +9,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import com.ecolink.dev.server.client.cli.Console;
-import com.ecolink.dev.server.client.cli.ConsoleCommand;
 import com.ecolink.dev.server.domain.UserDTO;
 import com.ecolink.dev.server.services.MessageService;
 import com.ecolink.dev.server.services.MessageServiceImpl;
@@ -26,7 +25,6 @@ public class ClientHandler implements Runnable{
 	private MessageService messageService;
 	private Console console;
 	
-    // Filas de mensagens apos logar ler as mensagens na fila
 	public ClientHandler(Socket socket) {
 		try {
 			this.socket = socket;
@@ -84,14 +82,28 @@ public class ClientHandler implements Runnable{
 				messageFromClient = bufferedReader.readLine();
 				String[] msgArray = messageFromClient.split("\\s");
 				System.out.println(console.getState().getName());
+
 				if(console.getState().getName().equals("ConsoleCommand")) {
 					ListenerFactory factory = new ListenerFactory();
 					ListenerFunction function = factory.createStringFunction(this, msgArray);
 					function.apply(msgArray);
 				} 
-				if(console.getState().getName().equals("ConsoleMessage")) {
-					//
+				if (msgArray[0].equals("/q")) {
+					console.onCommand();
+					System.out.println(console.getState().getName());
 				}
+				if(msgArray[0].equals("/m")) {
+					console.onMessage();
+					System.out.println(console.getState().getName());
+				}
+//				if (console.getState().getName().equals("ConsoleMessage")) {
+//					console.setClientHandler(this);
+//					console.processInput(socket, this, messageFromClient);
+//				}
+//				if (console.getState().getName().equals("ConsoleMessage")) {
+//					console.setClientHandler(this);
+//					console.processInput(socket, this, messageFromClient);
+//				}
 				
 				
 				

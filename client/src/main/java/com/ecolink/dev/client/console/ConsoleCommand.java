@@ -8,10 +8,10 @@ import com.ecolink.dev.client.commands.CommandControl;
 import picocli.CommandLine;
 
 public class ConsoleCommand implements ConsoleState {
-	
+
 	private String name = "ChatCommand";
 	private Console chat;
-	
+
 	public ConsoleCommand(Console chat) {
 		super();
 		this.chat = chat;
@@ -26,7 +26,7 @@ public class ConsoleCommand implements ConsoleState {
 	public void onCommand() {
 		System.out.println("[MODE - COMMAND]");
 	}
-	
+
 	@Override
 	public void onMessage() {
 		try {
@@ -38,9 +38,9 @@ public class ConsoleCommand implements ConsoleState {
 
 	@Override
 	public void processInput(Socket socket, String[] args) {
+		
 		CommandControl commandControl = new CommandControl(socket);
-		new CommandLine(commandControl)
-		.execute(args);			
+		new CommandLine(commandControl).execute(args);
 	}
-	
+
 }

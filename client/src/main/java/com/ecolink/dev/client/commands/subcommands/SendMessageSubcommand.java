@@ -8,7 +8,7 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.ParentCommand;
 import picocli.CommandLine.Spec;
 
-@Command(name = "send-message",
+@Command(name = "send",
 	mixinStandardHelpOptions = true)
 public class SendMessageSubcommand implements Runnable{
 	
@@ -38,7 +38,7 @@ public class SendMessageSubcommand implements Runnable{
 		System.out.println("tkUser: " + tkUser);
 			if(message != null) {
 				String msg = "send string " + global + " "+ tkUser + " "+ message;
-				System.out.println(msg);
+				
 				parent.getClientService().sendString(msg);
 			}
 	}
