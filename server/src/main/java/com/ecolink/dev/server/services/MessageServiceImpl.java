@@ -77,7 +77,7 @@ public class MessageServiceImpl implements MessageService{
 	}
 
 	@Override
-	public void anyMessage(String messageToSend, List<ClientHandler> group) {
+	public void anyMessage(String messageToSend, List<String> group) {
 		for(ClientHandler clients : group) {
 			try {
 				String userToken = clientHandler.getUserDTO().getToken();
