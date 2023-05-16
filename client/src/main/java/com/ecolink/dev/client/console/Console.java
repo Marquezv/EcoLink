@@ -39,5 +39,6 @@ public class Console {
 	public void setSocket(Socket socket) {
 		this.socket = socket;
 	}
+
 	
 }

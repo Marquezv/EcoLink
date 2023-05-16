@@ -29,11 +29,10 @@ public class ConsoleMessage implements ConsoleState {
 	}
 
 	@Override
-	public void processInput(Socket socket, ClientHandler clientHandler, String[] args) {
+	public void processInput(Socket socket,  ClientHandler clientHandler, String[] args) {
 		try {
-	        String message = String.join(" ", args);
-	        System.out.println("Message: " + message + " From: " + clientHandler.getUserDTO().getName() + " Group: " + chat.getTkConnection());
-//			new GroupServiceImpl(new GroupDao(), clientHandler).sendGroup(chat.getTkConnection(), message);
+			String reversedMessage = String.join(" ", args);
+			System.out.println(reversedMessage);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

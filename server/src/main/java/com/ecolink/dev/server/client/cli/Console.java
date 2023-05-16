@@ -30,6 +30,7 @@ public class Console {
 		this.state.onMessage();
 	}
 	
+
 	public void processInput(Socket socket, ClientHandler clientHanldler, String...args ) {
 		this.state.processInput(socket, clientHandler, args);
 	}

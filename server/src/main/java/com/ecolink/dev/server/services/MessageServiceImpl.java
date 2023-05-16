@@ -54,12 +54,11 @@ public class MessageServiceImpl implements MessageService{
 		for (ClientHandler clients: clientHandler.getClientHandlers()) {
 
 			try {
-				String userToken = clientHandler.getUserDTO().getToken();
-				if(!clients.getUserDTO().getToken().equals(userToken)) {
-					clients.getBufferedWriter().write("[SERVER]: " + messageToSend);
-					clients.getBufferedWriter().newLine();
-					clients.getBufferedWriter().flush();
-				}
+				
+				clients.getBufferedWriter().write("[SERVER]: " + messageToSend);
+				clients.getBufferedWriter().newLine();
+				clients.getBufferedWriter().flush();
+				
 			} catch (IOException e) {
 				unicastMessage("Client not logged");
 			}

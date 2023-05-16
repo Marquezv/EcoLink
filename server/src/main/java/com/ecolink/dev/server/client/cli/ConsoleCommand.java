@@ -21,6 +21,7 @@ public class ConsoleCommand implements ConsoleState {
 
 	@Override
 	public void onCommand() {
+		
 	}
 	
 	@Override

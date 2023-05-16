@@ -37,8 +37,9 @@ public class ConsoleMessage implements ConsoleState {
 	public void processInput(Socket socket, String[] args) {
 		
 		try {
-			String reversedMessage = String.join(" ", args);	
-			clientService.sendString(reversedMessage);
+			String reversedMessage = String.join(" ", args);
+			new ClientServiceImpl(socket).sendString(reversedMessage);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

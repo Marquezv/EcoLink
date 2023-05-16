@@ -82,31 +82,37 @@ public class ClientHandler implements Runnable {
 			while (socket.isConnected()) {
 				messageFromClient = bufferedReader.readLine();
 				String[] msgArray = messageFromClient.split("\\s");
-				System.out.println(console.getState());
-				if (msgArray[1].equals("login")) {
+				System.out.println(console.getState().getName());
+				
+				if(msgArray[0].equals("user") && msgArray[1].equals("login")) {
 					ListenerFactory factory = new ListenerFactory();
 					ListenerFunction function = factory.createStringFunction(this, msgArray);
 					function.apply(msgArray);
 				}
-				else if(this.userDTO == null ) {
-					messageService.unicastMessage("[SERVER] Make your login -> user --login -tk=<your_token> -p=<your_pass>");
-				} 
-				else {
-					if (console.getState().getName().equals("ConsoleCommand")) {
+				else if(this.userDTO != null) {
+					if(console.getState().getName().equals("ConsoleCommand")) {
 						ListenerFactory factory = new ListenerFactory();
 						ListenerFunction function = factory.createStringFunction(this, msgArray);
 						function.apply(msgArray);
-					}
-					if (msgArray[0].equals("/coc")) {
+					} 
+					if (msgArray[0].equals("/q")) {
 						console.onCommand();
+						continue;
 					}
-					if (console.getState().getName().equals("ConsoleMessage")) {
-						System.out.println(messageFromClient);
-						console.setClientHandler(this);
-						console.processInput(socket, this, messageFromClient);
+					if(msgArray[0].equals("/m")) {
+						console.onMessage();
+						continue;
 					}
+				} else {
+					messageService.unicastMessage("Make your login: user --login -tk=<your_token> -p=<your_pass>");
 				}
-			}
+				
+				console.processInput(socket, this, messageFromClient);
+				
+				
+				
+				
+			}	
 		} catch (Exception e) {
 			if (this.userDTO != null) {
 				messageService.broadcastMessage("SERVER: " + this.userDTO.getName() + " has left the chat!");
