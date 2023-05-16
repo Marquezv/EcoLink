@@ -20,9 +20,7 @@ public class SendCommand implements ListenerFunction{
 		if(args[1].toString() == "string" || args[1].toString().equals("string")) {
 			sendString(args);
 		}
-		
 	}
-	
 
 	private void sendString(String...args) {
 		String global = args[2].toString();

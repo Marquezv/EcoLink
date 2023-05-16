@@ -89,7 +89,6 @@ public class GroupCommand implements ListenerFunction {
 
 		try {
 			GroupDTO groupDTO = groupService.findGroup(tkGroup);
-			System.out.println(groupDTO);
 			groupService.openGroup(groupDTO);
 		} catch (Exception e) {
 			messageService.unicastMessage("GROUP NOT FOUND");

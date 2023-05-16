@@ -3,16 +3,19 @@ package com.ecolink.dev.client.console;
 import java.io.IOException;
 import java.net.Socket;
 
+import com.ecolink.dev.client.services.ClientService;
 import com.ecolink.dev.client.services.ClientServiceImpl;
 
 public class ConsoleMessage implements ConsoleState {
 	
 	private String name = "ChatMessage";
 	private Console chat;
+	private ClientService clientService;
 	
 	public ConsoleMessage(Console chat) throws IOException {
 		super();
 		this.chat = chat;
+		this.clientService = new ClientServiceImpl(chat.getSocket());
 	}
 
 	@Override
@@ -36,6 +39,7 @@ public class ConsoleMessage implements ConsoleState {
 		try {
 			String reversedMessage = String.join(" ", args);
 			new ClientServiceImpl(socket).sendString(reversedMessage);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

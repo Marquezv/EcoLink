@@ -29,6 +29,7 @@ public class UserCommand implements ListenerFunction{
 
 	@Override
 	public void apply(String...args) {
+		
 		if(args[1].toString() == "login" || args[1].toString().equals("login")) {
 			login(args);
 		}

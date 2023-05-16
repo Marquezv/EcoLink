@@ -8,13 +8,10 @@ public class ConsoleMessage implements ConsoleState {
 	
 	private String name = "ConsoleMessage";
 	private Console chat;
-//	private ClientService clientService;
 	
 	public ConsoleMessage(Console chat) {
 		super();
 		this.chat = chat;
-//		this.clientService = new ClientServiceImpl(socket);
-
 	}
 
 	@Override

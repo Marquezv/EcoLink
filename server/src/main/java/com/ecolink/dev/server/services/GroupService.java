@@ -13,6 +13,8 @@ public interface GroupService {
 	
 	void openGroup(GroupDTO groupDTO) throws Exception;
 	
+	void sendGroup(String tkGrop, String messsage) throws Exception;
+	
 	GroupDTO findGroup(String tkGroup);
 	
 	List<GroupDTO> getAllGroups() throws SQLException;

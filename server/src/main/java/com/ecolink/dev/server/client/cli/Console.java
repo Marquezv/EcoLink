@@ -7,9 +7,7 @@ import com.ecolink.dev.server.client.ClientHandler;
 public class Console {
 	
 	private ConsoleState state = new ConsoleCommand(this);
-	//tkGroup or TkUser
 	private String tkConnection;
-	
 	private ClientHandler clientHandler;
 	
 	public ConsoleState getState() {
@@ -32,7 +30,8 @@ public class Console {
 		this.state.onMessage();
 	}
 	
-	public void processInput(Socket socket, ClientHandler clientHandler, String...args) {
+
+	public void processInput(Socket socket, ClientHandler clientHanldler, String...args ) {
 		this.state.processInput(socket, clientHandler, args);
 	}
 

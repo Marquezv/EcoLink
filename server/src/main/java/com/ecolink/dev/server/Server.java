@@ -15,26 +15,28 @@ public class Server {
 	}
 	
 	public void startServer() {
-		try {
+		try {			
 			while(!serverSocket.isClosed()) {
 				Socket socket = serverSocket.accept();
-				System.out.println("Client connected: " + socket.getInetAddress());
+				System.out.println("Client connected: " + socket.getInetAddress() + " Port: " + socket.getPort());
 				ClientHandler clientHandler = new ClientHandler(socket);
 				Thread thread = new Thread(clientHandler);
 				thread.start();
-			}
 
+			}
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
+	
+	
 	public void closeServerSocket() {
 		try {
 			if(serverSocket != null) {
 				serverSocket.close();
 			}
-
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -50,8 +52,7 @@ public class Server {
 				Server server = new Server(serverSocket);
 				System.out.println("Server Started - PORT[" + PORT + "]");
 				server.startServer();
-
-//				server.createNewDatabse("ecolink.db");
+				
 			} catch (Exception e) {
 				System.out.println("ERROR - " + e.getMessage());
 			}

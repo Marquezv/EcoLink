@@ -98,6 +98,7 @@ public class AllowedGroupUserDao implements JdbcDao<AllowedGroupUser> {
         List<AllowedGroupUser> allowed = new ArrayList<>();
         try(Connection conn = ConnectJDBC.connectDB()) {
 			PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, tkGroup);
 			ResultSet resultSet = statement.executeQuery();
 			while(resultSet.next()) {
 				AllowedGroupUser allowedGroupUser = mapRowToUser(resultSet);
@@ -107,6 +108,7 @@ public class AllowedGroupUserDao implements JdbcDao<AllowedGroupUser> {
 		}
 		return allowed;
 	}
+	
 	
 	private AllowedGroupUser mapRowToUser(ResultSet resultSet) throws SQLException {
         String id = resultSet.getString("id");
