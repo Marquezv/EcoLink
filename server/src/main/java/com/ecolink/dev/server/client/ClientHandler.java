@@ -35,6 +35,7 @@ public class ClientHandler implements Runnable {
 			this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.messageService = new MessageServiceImpl(this);
 			this.console = new Console();
+			this.console.setClientHandler(this);
 			clientHandlers.add(this);
 		} catch (Exception e) {
 			closeEverything(socket, bufferedReader, bufferedWriter);
@@ -82,7 +83,6 @@ public class ClientHandler implements Runnable {
 			while (socket.isConnected()) {
 				messageFromClient = bufferedReader.readLine();
 				String[] msgArray = messageFromClient.split("\\s");
-				System.out.println(console.getState().getName());
 				
 				if(msgArray[0].equals("user") && msgArray[1].equals("login")) {
 					ListenerFactory factory = new ListenerFactory();
@@ -101,6 +101,7 @@ public class ClientHandler implements Runnable {
 					}
 					if(msgArray[0].equals("/m")) {
 						console.onMessage();
+						console.processInput(socket, this, msgArray);
 						continue;
 					}
 				} else {
@@ -108,9 +109,6 @@ public class ClientHandler implements Runnable {
 				}
 				
 				console.processInput(socket, this, messageFromClient);
-				
-				
-				
 				
 			}	
 		} catch (Exception e) {

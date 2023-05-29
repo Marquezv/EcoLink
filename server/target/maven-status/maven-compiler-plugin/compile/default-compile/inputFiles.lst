@@ -4,6 +4,7 @@
 /home/vmarques/EcoLink/server/src/main/java/com/ecolink/dev/server/services/GroupServiceImpl.java
 /home/vmarques/EcoLink/server/src/main/java/com/ecolink/dev/server/repository/AllowedGroupUserDao.java
 /home/vmarques/EcoLink/server/src/main/java/com/ecolink/dev/server/repository/UserDao.java
+/home/vmarques/EcoLink/server/src/main/java/com/ecolink/dev/server/enums/Connection.java
 /home/vmarques/EcoLink/server/src/main/java/com/ecolink/dev/server/repository/GroupDao.java
 /home/vmarques/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/GroupDTO.java
 /home/vmarques/EcoLink/server/src/main/java/com/ecolink/dev/server/services/GroupService.java
@@ -22,7 +23,6 @@
 /home/vmarques/EcoLink/server/src/main/java/com/ecolink/dev/server/client/ClientHandler.java
 /home/vmarques/EcoLink/server/src/main/java/com/ecolink/dev/server/client/cli/ConsoleMessage.java
 /home/vmarques/EcoLink/server/src/main/java/com/ecolink/dev/server/services/MessageService.java
-/home/vmarques/EcoLink/server/src/main/java/com/ecolink/dev/server/enums/State.java
 /home/vmarques/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/Sector.java
 /home/vmarques/EcoLink/server/src/main/java/com/ecolink/dev/server/domain/UserDTO.java
 /home/vmarques/EcoLink/server/src/main/java/com/ecolink/dev/server/utils/ConnectJDBC.java

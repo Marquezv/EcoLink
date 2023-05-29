@@ -5,9 +5,11 @@ import java.util.List;
 import com.ecolink.dev.server.domain.UserDTO;
 
 public interface UserService {
-
+	
 	UserDTO getUserByToken(String token) throws Exception;
 
+	void sendUser(String tkUser, String message) throws Exception;
+	
 	List<UserDTO> getAllUsers() throws Exception;
 	
 	List<UserDTO> getAllUsersOnline() throws Exception;

@@ -5,7 +5,6 @@ com/ecolink/dev/server/Server.class
 com/ecolink/dev/server/services/AllowedGroupUserServiceImpl.class
 com/ecolink/dev/server/repository/AllowedGroupUserDao.class
 com/ecolink/dev/server/repository/UserDao.class
-com/ecolink/dev/server/enums/State.class
 com/ecolink/dev/server/repository/GroupDao.class
 com/ecolink/dev/server/domain/entity/User.class
 com/ecolink/dev/server/domain/Message.class

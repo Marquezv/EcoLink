@@ -15,10 +15,12 @@ public class UserServiceImpl implements UserService {
 
 	private UserDao userDao;
 	private ClientHandler clientHandler;
-
+	private MessageService messageService;
+	
 	public UserServiceImpl(UserDao userDao, ClientHandler clientHandler) {
 		this.userDao = userDao;
 		this.clientHandler = clientHandler;
+		this.messageService = new MessageServiceImpl(clientHandler);
 	}
 	
 	@Override
@@ -73,6 +75,16 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 		return usersOline;
+	}
+
+	@Override
+	public void sendUser(String tkUser, String message) throws Exception {
+		try {
+			userDao.findByToken(tkUser).toDTO();
+			messageService.sendToTokens(message, tkUser);
+		} catch (Exception e) {
+			messageService.unicastMessage("[ERROR - SEND_USER]");
+		}	
 	}
 
 }

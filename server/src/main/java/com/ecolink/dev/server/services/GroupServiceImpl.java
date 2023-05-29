@@ -10,6 +10,7 @@ import com.ecolink.dev.server.client.cli.Console;
 import com.ecolink.dev.server.domain.GroupDTO;
 import com.ecolink.dev.server.domain.UserDTO;
 import com.ecolink.dev.server.domain.entity.Group;
+import com.ecolink.dev.server.enums.Connection;
 import com.ecolink.dev.server.repository.AllowedGroupUserDao;
 import com.ecolink.dev.server.repository.GroupDao;
 import com.ecolink.dev.server.repository.UserDao;
@@ -87,6 +88,7 @@ public class GroupServiceImpl implements GroupService {
 			messageService.unicastMessage("-------GROUP: " + groupDTO.getName() + " | " + groupDTO.getToken() + " -------");
 			console.onMessage();
 			console.setTkConnection(groupDTO.getToken());
+			console.setTypeConnection(Connection.GROUP);
 		} catch (Exception e){
 			messageService.unicastMessage("[ERROR - OPEN_GROUP]");
 		}

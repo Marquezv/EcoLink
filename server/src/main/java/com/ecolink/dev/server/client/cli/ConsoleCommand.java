@@ -31,9 +31,7 @@ public class ConsoleCommand implements ConsoleState {
 
 	@Override
 	public void processInput(Socket socket, ClientHandler clientHandler, String[] args) {
-//		CommandControl commandControl = new CommandControl(socket);
-//		new CommandLine(commandControl)
-//		.execute(args);			
+		
 	}
 	
 }

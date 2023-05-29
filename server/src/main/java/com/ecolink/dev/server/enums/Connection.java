@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public enum State {
+public enum Connection {
 	NONE("NONE"),
 	GROUP("GROUP"),
 	USER("USER");

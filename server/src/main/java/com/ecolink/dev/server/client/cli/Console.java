@@ -3,11 +3,13 @@ package com.ecolink.dev.server.client.cli;
 import java.net.Socket;
 
 import com.ecolink.dev.server.client.ClientHandler;
+import com.ecolink.dev.server.enums.Connection;
 
 public class Console {
 	
 	private ConsoleState state = new ConsoleCommand(this);
 	private String tkConnection;
+	private Connection typeConnection;
 	private ClientHandler clientHandler;
 	
 	public ConsoleState getState() {
@@ -49,6 +51,14 @@ public class Console {
 
 	public void setClientHandler(ClientHandler clientHandler) {
 		this.clientHandler = clientHandler;
+	}
+
+	public Connection getTypeConnection() {
+		return typeConnection;
+	}
+
+	public void setTypeConnection(Connection typeConnection) {
+		this.typeConnection = typeConnection;
 	}
 	
 }

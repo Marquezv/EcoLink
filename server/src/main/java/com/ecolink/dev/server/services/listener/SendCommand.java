@@ -35,6 +35,5 @@ public class SendCommand implements ListenerFunction{
 		}
 	}
 	
-	
 
 }
