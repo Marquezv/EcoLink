@@ -28,9 +28,7 @@ public class Server {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
+
 	public void closeServerSocket() {
 		try {
 			if(serverSocket != null) {

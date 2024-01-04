@@ -25,10 +25,14 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public UserDTO login(String token, String password) throws Exception {
-		User user = userDao.findByToken(token);
+		try {
+			User user = userDao.findByToken(token);
 
-		if (user.getPassword().equals(password)) {
-			return user.toDTO();
+			if (user.getPassword().equals(password)) {
+				return user.toDTO();
+			}
+		} catch (Exception e) {
+			
 		}
 
 		return null;

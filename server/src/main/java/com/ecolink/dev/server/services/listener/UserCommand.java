@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import com.ecolink.dev.server.client.ClientHandler;
 import com.ecolink.dev.server.domain.UserDTO;
+import com.ecolink.dev.server.exception.ExException;
+import com.ecolink.dev.server.exception.handler.ObservableExceptionHandler;
 import com.ecolink.dev.server.repository.UserDao;
 import com.ecolink.dev.server.services.MessageService;
 import com.ecolink.dev.server.services.MessageServiceImpl;
@@ -19,12 +21,15 @@ public class UserCommand implements ListenerFunction{
 	private ClientHandler clientHandler;
 	private UserService userService;
 	private MessageService messageService;
+	private ObservableExceptionHandler exception;
 	
 	public UserCommand(ClientHandler clientHandler) {
 		super();
 		this.clientHandler = clientHandler;
 		this.messageService = new MessageServiceImpl(clientHandler);
 		this.userService = new UserServiceImpl(new UserDao(), clientHandler);
+		this.exception = new ObservableExceptionHandler();
+        exception.addObserver(new ExException());
 	}
 
 	@Override
@@ -56,8 +61,7 @@ public class UserCommand implements ListenerFunction{
 			String name = clientHandler.getUserDTO().getName();
 			messageService.unicastMessage("[LOGED] token: " + token + " user: " + name);
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+            exception.handleException(e);
 			messageService.unicastMessage("[ERROR] token: " + token + " NOT FOUND");
 		}
 	}
